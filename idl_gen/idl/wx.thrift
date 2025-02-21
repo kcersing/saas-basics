@@ -57,6 +57,24 @@ service WxService {
    base.NilResponse MemberContractList(1: member.MemberContractListReq req) (api.post = "/service/wx/member/contract-list")
    /**会员课程列表*/
    base.NilResponse ScheduleMemberList(1: schedule.ScheduleMemberListReq req) (api.post = "/service/wx/member/schedule-member-list")
+   /**扫码入场*/
+   //base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
+   base.NilResponse ScanQR (1: ScanQRReq req) (api.post = "/service/wx/member/scan-QR")
+   /**激活*/
+   base.NilResponse Activation (1: base.IDReq req) (api.post = "/service/wx/member/activation")
+   /**会员私教课约课*/
+   base.NilResponse CreateMemberScheduleCourse(1: schedule.CreateOrUpdateScheduleCourseReq req) (api.post = "/service/wx/member/create-member-schedule-course")
+   /**排团教课*/
+   base.NilResponse CreateMemberScheduleCourseLessons(1: CreateMemberScheduleLessonsReq req) (api.post = "/service/wx/member/create-member-schedule-lessons")
+   /**场地预约*/
+   base.NilResponse CreatePlaceSchedule(1: CreatePlaceScheduleReq req) (api.post = "/service/wx/member/create-place-schedule")
+   /**下单*/
+   base.NilResponse Buy(1: order.BuyReq req) (api.post = "/service/wx/member/buy")
+   /**支付*/
+   base.NilResponse Pay(1: order.OrderPay req) (api.post = "/service/wx/member/pay")
+
+
+
 
    /**比赛列表*/
    base.NilResponse ContestList (1: contest.ContestListReq req) (api.post = "/service/wx/contest-list")
@@ -64,7 +82,6 @@ service WxService {
    base.NilResponse ContestInfo (1: base.IDReq req) (api.post = "/service/wx/contest-info")
    /**比赛报名*/
    base.NilResponse JoinContest (1: JoinContestReq req) (api.post = "/service/wx/join-contest")
-
 
    /**训练营列表*/
    base.NilResponse BootcampList (1: bootcamp.BootcampListReq req) (api.post = "/service/wx/bootcamp-list")
@@ -84,27 +101,10 @@ service WxService {
    base.NilResponse VenueList (1: venue.VenueListReq req) (api.post = "/service/wx/venue-list")
    /**场馆详情*/
    base.NilResponse VenueInfo (1: base.IDReq req) (api.post = "/service/wx/venue-info")
-
-   /**扫码入场*/
-   //base.NilResponse ScanEnterQR (1: ScanQREnterReq req) (api.post = "/service/wx/scan-QR-Enter")
-   base.NilResponse ScanQR (1: ScanQRReq req) (api.post = "/service/wx/member/scan-QR")
-   /**激活*/
-   base.NilResponse Activation (1: base.IDReq req) (api.post = "/service/wx/member/activation")
-
-
-    /**会员私教课约课*/
-    base.NilResponse CreateMemberScheduleCourse(1: schedule.CreateOrUpdateScheduleCourseReq req) (api.post = "/service/wx/member/create-member-schedule-course")
-    /**排团教课*/
-    base.NilResponse CreateMemberScheduleCourseLessons(1: CreateMemberScheduleLessonsReq req) (api.post = "/service/wx/member/create-member-schedule-lessons")
-
    /**产品详情*/
    base.NilResponse ProductInfo(1: base.IDReq req) (api.post = "/service/wx/product-info")
    /**产品列表*/
    base.NilResponse ProductList(1: product.ProductListReq req) (api.post = "/service/wx/product-list")
-   /**下单*/
-   base.NilResponse Buy(1: order.BuyReq req) (api.post = "/service/wx/member/buy")
-   /**支付*/
-   base.NilResponse Pay(1: order.OrderPay req) (api.post = "/service/wx/member/pay")
 
    /**教练列表*/
    base.NilResponse CoachList(1: CoachListReq req) (api.post = "/service/wx/coach-list")
@@ -115,8 +115,7 @@ service WxService {
    base.NilResponse PlaceList(1: venue.VenuePlaceListReq req) (api.post = "/service/wx/place-list")
    /**场地详情*/
    base.NilResponse PlaceInfo(1: base.IDReq req) (api.post = "/service/wx/place-info")
-   /**场地预约*/
-   base.NilResponse CreatePlaceSchedule(1: CreatePlaceScheduleReq req) (api.post = "/service/wx/member/create-place-schedule")
+
 
    /**我的会员*/
    base.NilResponse MyMember(1: MyMemberReq req) (api.post = "/service/wx/staff/my-member")

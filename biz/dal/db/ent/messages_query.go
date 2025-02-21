@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/messages"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -342,6 +343,8 @@ func (mq *MessagesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mes
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mq.schemaConfig.Messages
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -356,6 +359,8 @@ func (mq *MessagesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mes
 
 func (mq *MessagesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mq.querySpec()
+	_spec.Node.Schema = mq.schemaConfig.Messages
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	_spec.Node.Columns = mq.ctx.Fields
 	if len(mq.ctx.Fields) > 0 {
 		_spec.Unique = mq.ctx.Unique != nil && *mq.ctx.Unique
@@ -418,6 +423,9 @@ func (mq *MessagesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mq.ctx.Unique != nil && *mq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mq.schemaConfig.Messages)
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mq.predicates {
 		p(selector)
 	}

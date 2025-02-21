@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (mpq *MemberProfileQuery) QueryMember() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.MemberTable, memberprofile.MemberColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProfile
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (mpq *MemberProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mpq.schemaConfig.MemberProfile
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (mpq *MemberProfileQuery) loadMember(ctx context.Context, query *MemberQuer
 
 func (mpq *MemberProfileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mpq.querySpec()
+	_spec.Node.Schema = mpq.schemaConfig.MemberProfile
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	_spec.Node.Columns = mpq.ctx.Fields
 	if len(mpq.ctx.Fields) > 0 {
 		_spec.Unique = mpq.ctx.Unique != nil && *mpq.ctx.Unique
@@ -497,6 +505,9 @@ func (mpq *MemberProfileQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mpq.ctx.Unique != nil && *mpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mpq.schemaConfig.MemberProfile)
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mpq.predicates {
 		p(selector)
 	}

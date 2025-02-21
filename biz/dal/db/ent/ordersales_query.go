@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/ordersales"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (osq *OrderSalesQuery) QueryOrder() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.OrderTable, ordersales.OrderColumn),
 		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderSales
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (osq *OrderSalesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = osq.schemaConfig.OrderSales
+	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (osq *OrderSalesQuery) loadOrder(ctx context.Context, query *OrderQuery, no
 
 func (osq *OrderSalesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := osq.querySpec()
+	_spec.Node.Schema = osq.schemaConfig.OrderSales
+	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
 	_spec.Node.Columns = osq.ctx.Fields
 	if len(osq.ctx.Fields) > 0 {
 		_spec.Unique = osq.ctx.Unique != nil && *osq.ctx.Unique
@@ -497,6 +505,9 @@ func (osq *OrderSalesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if osq.ctx.Unique != nil && *osq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(osq.schemaConfig.OrderSales)
+	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range osq.predicates {
 		p(selector)
 	}

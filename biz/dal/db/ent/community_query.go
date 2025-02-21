@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/community"
 	"saas/biz/dal/db/ent/communityparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -76,6 +77,9 @@ func (cq *CommunityQuery) QueryCommunityParticipants() *CommunityParticipantQuer
 			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, community.CommunityParticipantsTable, community.CommunityParticipantsColumn),
 		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (cq *CommunityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Co
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = cq.schemaConfig.Community
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -437,6 +443,8 @@ func (cq *CommunityQuery) loadCommunityParticipants(ctx context.Context, query *
 
 func (cq *CommunityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
+	_spec.Node.Schema = cq.schemaConfig.Community
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	_spec.Node.Columns = cq.ctx.Fields
 	if len(cq.ctx.Fields) > 0 {
 		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
@@ -499,6 +507,9 @@ func (cq *CommunityQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if cq.ctx.Unique != nil && *cq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(cq.schemaConfig.Community)
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range cq.predicates {
 		p(selector)
 	}

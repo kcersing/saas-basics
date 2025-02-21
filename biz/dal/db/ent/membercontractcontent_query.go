@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (mccq *MemberContractContentQuery) QueryContract() *MemberContractQuery {
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontractcontent.ContractTable, membercontractcontent.ContractColumn),
 		)
+		schemaConfig := mccq.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		fromU = sqlgraph.SetNeighbors(mccq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (mccq *MemberContractContentQuery) sqlAll(ctx context.Context, hooks ...que
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mccq.schemaConfig.MemberContractContent
+	ctx = internal.NewSchemaConfigContext(ctx, mccq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (mccq *MemberContractContentQuery) loadContract(ctx context.Context, query 
 
 func (mccq *MemberContractContentQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mccq.querySpec()
+	_spec.Node.Schema = mccq.schemaConfig.MemberContractContent
+	ctx = internal.NewSchemaConfigContext(ctx, mccq.schemaConfig)
 	_spec.Node.Columns = mccq.ctx.Fields
 	if len(mccq.ctx.Fields) > 0 {
 		_spec.Unique = mccq.ctx.Unique != nil && *mccq.ctx.Unique
@@ -497,6 +505,9 @@ func (mccq *MemberContractContentQuery) sqlQuery(ctx context.Context) *sql.Selec
 	if mccq.ctx.Unique != nil && *mccq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mccq.schemaConfig.MemberContractContent)
+	ctx = internal.NewSchemaConfigContext(ctx, mccq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mccq.predicates {
 		p(selector)
 	}

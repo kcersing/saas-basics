@@ -3,6 +3,7 @@
 package ordersales
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -537,6 +538,9 @@ func HasOrder() predicate.OrderSales {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderSales
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -545,6 +549,9 @@ func HasOrder() predicate.OrderSales {
 func HasOrderWith(preds ...predicate.Order) predicate.OrderSales {
 	return predicate.OrderSales(func(s *sql.Selector) {
 		step := newOrderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderSales
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

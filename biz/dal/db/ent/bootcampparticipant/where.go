@@ -3,6 +3,7 @@
 package bootcampparticipant
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -857,6 +858,9 @@ func HasBootcamps() predicate.BootcampParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, BootcampsTable, BootcampsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Bootcamp
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -865,6 +869,9 @@ func HasBootcamps() predicate.BootcampParticipant {
 func HasBootcampsWith(preds ...predicate.Bootcamp) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
 		step := newBootcampsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Bootcamp
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -880,6 +887,9 @@ func HasMembers() predicate.BootcampParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -888,6 +898,9 @@ func HasMembers() predicate.BootcampParticipant {
 func HasMembersWith(preds ...predicate.Member) predicate.BootcampParticipant {
 	return predicate.BootcampParticipant(func(s *sql.Selector) {
 		step := newMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

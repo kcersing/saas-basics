@@ -262,6 +262,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 		_node = &DictionaryDetail{config: ddc.config}
 		_spec = sqlgraph.NewCreateSpec(dictionarydetail.Table, sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = ddc.schemaConfig.DictionaryDetail
 	if id, ok := ddc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -309,6 +310,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddc.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -326,6 +328,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddc.schemaConfig.UserTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -342,6 +345,7 @@ func (ddc *DictionaryDetailCreate) createSpec() (*DictionaryDetail, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddc.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

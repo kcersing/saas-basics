@@ -228,6 +228,7 @@ func (bc *BannerCreate) createSpec() (*Banner, *sqlgraph.CreateSpec) {
 		_node = &Banner{config: bc.config}
 		_spec = sqlgraph.NewCreateSpec(banner.Table, sqlgraph.NewFieldSpec(banner.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = bc.schemaConfig.Banner
 	if id, ok := bc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

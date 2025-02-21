@@ -259,6 +259,7 @@ func (utpc *UserTimePeriodCreate) createSpec() (*UserTimePeriod, *sqlgraph.Creat
 		_node = &UserTimePeriod{config: utpc.config}
 		_spec = sqlgraph.NewCreateSpec(usertimeperiod.Table, sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = utpc.schemaConfig.UserTimePeriod
 	if id, ok := utpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -306,6 +307,7 @@ func (utpc *UserTimePeriodCreate) createSpec() (*UserTimePeriod, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = utpc.schemaConfig.UserTimePeriod
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

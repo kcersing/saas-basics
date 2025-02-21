@@ -3,6 +3,7 @@
 package schedulecoach
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1107,6 +1108,9 @@ func HasSchedule() predicate.ScheduleCoach {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ScheduleTable, ScheduleColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1115,6 +1119,9 @@ func HasSchedule() predicate.ScheduleCoach {
 func HasScheduleWith(preds ...predicate.Schedule) predicate.ScheduleCoach {
 	return predicate.ScheduleCoach(func(s *sql.Selector) {
 		step := newScheduleStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

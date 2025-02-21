@@ -3,6 +3,7 @@
 package membernote
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -507,6 +508,9 @@ func HasNotes() predicate.MemberNote {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, NotesTable, NotesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberNote
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -515,6 +519,9 @@ func HasNotes() predicate.MemberNote {
 func HasNotesWith(preds ...predicate.Member) predicate.MemberNote {
 	return predicate.MemberNote(func(s *sql.Selector) {
 		step := newNotesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberNote
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

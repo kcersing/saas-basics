@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
@@ -80,6 +81,9 @@ func (rq *RoleQuery) QueryMenus() *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, role.MenusTable, role.MenusPrimaryKey...),
 		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.RoleMenus
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -102,6 +106,9 @@ func (rq *RoleQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, role.UsersTable, role.UsersPrimaryKey...),
 		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserRoles
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -124,6 +131,9 @@ func (rq *RoleQuery) QueryVenues() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, role.VenuesTable, role.VenuesPrimaryKey...),
 		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueRoles
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -457,6 +467,8 @@ func (rq *RoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Role, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = rq.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -503,6 +515,7 @@ func (rq *RoleQuery) loadMenus(ctx context.Context, query *MenuQuery, nodes []*R
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(role.MenusTable)
+		joinT.Schema(rq.schemaConfig.RoleMenus)
 		s.Join(joinT).On(s.C(menu.FieldID), joinT.C(role.MenusPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(role.MenusPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -564,6 +577,7 @@ func (rq *RoleQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*R
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(role.UsersTable)
+		joinT.Schema(rq.schemaConfig.UserRoles)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(role.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(role.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -625,6 +639,7 @@ func (rq *RoleQuery) loadVenues(ctx context.Context, query *VenueQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(role.VenuesTable)
+		joinT.Schema(rq.schemaConfig.VenueRoles)
 		s.Join(joinT).On(s.C(venue.FieldID), joinT.C(role.VenuesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(role.VenuesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -676,6 +691,8 @@ func (rq *RoleQuery) loadVenues(ctx context.Context, query *VenueQuery, nodes []
 
 func (rq *RoleQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := rq.querySpec()
+	_spec.Node.Schema = rq.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
 	_spec.Node.Columns = rq.ctx.Fields
 	if len(rq.ctx.Fields) > 0 {
 		_spec.Unique = rq.ctx.Unique != nil && *rq.ctx.Unique
@@ -738,6 +755,9 @@ func (rq *RoleQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if rq.ctx.Unique != nil && *rq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(rq.schemaConfig.Role)
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range rq.predicates {
 		p(selector)
 	}

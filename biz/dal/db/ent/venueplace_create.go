@@ -367,6 +367,7 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 		_node = &VenuePlace{config: vpc.config}
 		_spec = sqlgraph.NewCreateSpec(venueplace.Table, sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = vpc.schemaConfig.VenuePlace
 	if id, ok := vpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -442,6 +443,7 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpc.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -459,6 +461,7 @@ func (vpc *VenuePlaceCreate) createSpec() (*VenuePlace, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpc.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

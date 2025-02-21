@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/contract"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 
@@ -76,6 +77,9 @@ func (cq *ContractQuery) QueryProducts() *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contract.ProductsTable, contract.ProductsPrimaryKey...),
 		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductContracts
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (cq *ContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Con
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = cq.schemaConfig.Contract
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -415,6 +421,7 @@ func (cq *ContractQuery) loadProducts(ctx context.Context, query *ProductQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contract.ProductsTable)
+		joinT.Schema(cq.schemaConfig.ProductContracts)
 		s.Join(joinT).On(s.C(product.FieldID), joinT.C(contract.ProductsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(contract.ProductsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -466,6 +473,8 @@ func (cq *ContractQuery) loadProducts(ctx context.Context, query *ProductQuery, 
 
 func (cq *ContractQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
+	_spec.Node.Schema = cq.schemaConfig.Contract
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	_spec.Node.Columns = cq.ctx.Fields
 	if len(cq.ctx.Fields) > 0 {
 		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
@@ -528,6 +537,9 @@ func (cq *ContractQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if cq.ctx.Unique != nil && *cq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(cq.schemaConfig.Contract)
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range cq.predicates {
 		p(selector)
 	}

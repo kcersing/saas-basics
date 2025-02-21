@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -76,6 +77,9 @@ func (dq *DictionaryQuery) QueryDictionaryDetails() *DictionaryDetailQuery {
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, dictionary.DictionaryDetailsTable, dictionary.DictionaryDetailsColumn),
 		)
+		schemaConfig := dq.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.DictionaryDetail
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (dq *DictionaryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*D
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = dq.schemaConfig.Dictionary
+	ctx = internal.NewSchemaConfigContext(ctx, dq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -437,6 +443,8 @@ func (dq *DictionaryQuery) loadDictionaryDetails(ctx context.Context, query *Dic
 
 func (dq *DictionaryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := dq.querySpec()
+	_spec.Node.Schema = dq.schemaConfig.Dictionary
+	ctx = internal.NewSchemaConfigContext(ctx, dq.schemaConfig)
 	_spec.Node.Columns = dq.ctx.Fields
 	if len(dq.ctx.Fields) > 0 {
 		_spec.Unique = dq.ctx.Unique != nil && *dq.ctx.Unique
@@ -499,6 +507,9 @@ func (dq *DictionaryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if dq.ctx.Unique != nil && *dq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(dq.schemaConfig.Dictionary)
+	ctx = internal.NewSchemaConfigContext(ctx, dq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range dq.predicates {
 		p(selector)
 	}

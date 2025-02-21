@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
@@ -472,6 +473,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.RoleMenus
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ru.mutation.RemovedMenusIDs(); len(nodes) > 0 && !ru.mutation.MenusCleared() {
@@ -485,6 +487,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -501,6 +504,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -517,6 +521,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.UserRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ru.mutation.RemovedUsersIDs(); len(nodes) > 0 && !ru.mutation.UsersCleared() {
@@ -530,6 +535,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.UserRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -546,6 +552,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.UserRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -562,6 +569,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.VenueRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ru.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !ru.mutation.VenuesCleared() {
@@ -575,6 +583,7 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -591,11 +600,14 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ru.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = ru.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, ru.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{role.Label}
@@ -1086,6 +1098,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.RoleMenus
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ruo.mutation.RemovedMenusIDs(); len(nodes) > 0 && !ruo.mutation.MenusCleared() {
@@ -1099,6 +1112,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1115,6 +1129,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1131,6 +1146,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.UserRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ruo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !ruo.mutation.UsersCleared() {
@@ -1144,6 +1160,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.UserRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1160,6 +1177,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.UserRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1176,6 +1194,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.VenueRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ruo.mutation.RemovedVenuesIDs(); len(nodes) > 0 && !ruo.mutation.VenuesCleared() {
@@ -1189,6 +1208,7 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1205,11 +1225,14 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ruo.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = ruo.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, ruo.schemaConfig)
 	_node = &Role{config: ruo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

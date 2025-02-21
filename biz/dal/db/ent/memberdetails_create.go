@@ -386,6 +386,7 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 		_node = &MemberDetails{config: mdc.config}
 		_spec = sqlgraph.NewCreateSpec(memberdetails.Table, sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mdc.schemaConfig.MemberDetails
 	if id, ok := mdc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -469,6 +470,7 @@ func (mdc *MemberDetailsCreate) createSpec() (*MemberDetails, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mdc.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

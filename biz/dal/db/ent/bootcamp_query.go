@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -76,6 +77,9 @@ func (bq *BootcampQuery) QueryBootcampParticipants() *BootcampParticipantQuery {
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, bootcamp.BootcampParticipantsTable, bootcamp.BootcampParticipantsColumn),
 		)
+		schemaConfig := bq.schemaConfig
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (bq *BootcampQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Boo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = bq.schemaConfig.Bootcamp
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -437,6 +443,8 @@ func (bq *BootcampQuery) loadBootcampParticipants(ctx context.Context, query *Bo
 
 func (bq *BootcampQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := bq.querySpec()
+	_spec.Node.Schema = bq.schemaConfig.Bootcamp
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
 	_spec.Node.Columns = bq.ctx.Fields
 	if len(bq.ctx.Fields) > 0 {
 		_spec.Unique = bq.ctx.Unique != nil && *bq.ctx.Unique
@@ -499,6 +507,9 @@ func (bq *BootcampQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if bq.ctx.Unique != nil && *bq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(bq.schemaConfig.Bootcamp)
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range bq.predicates {
 		p(selector)
 	}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
@@ -375,6 +376,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.DictionaryDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ddu.mutation.DictionaryIDs(); len(nodes) > 0 {
@@ -388,6 +390,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -404,6 +407,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.UserTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ddu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !ddu.mutation.UsersCleared() {
@@ -417,6 +421,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.UserTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -433,6 +438,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.UserTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -449,6 +455,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.ProductTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ddu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !ddu.mutation.ProductsCleared() {
@@ -462,6 +469,7 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -478,11 +486,14 @@ func (ddu *DictionaryDetailUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ddu.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = ddu.schemaConfig.DictionaryDetail
+	ctx = internal.NewSchemaConfigContext(ctx, ddu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, ddu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{dictionarydetail.Label}
@@ -877,6 +888,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.DictionaryDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := dduo.mutation.DictionaryIDs(); len(nodes) > 0 {
@@ -890,6 +902,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -906,6 +919,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.UserTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := dduo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !dduo.mutation.UsersCleared() {
@@ -919,6 +933,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.UserTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -935,6 +950,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.UserTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -951,6 +967,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.ProductTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := dduo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !dduo.mutation.ProductsCleared() {
@@ -964,6 +981,7 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -980,11 +998,14 @@ func (dduo *DictionaryDetailUpdateOne) sqlSave(ctx context.Context) (_node *Dict
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dduo.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = dduo.schemaConfig.DictionaryDetail
+	ctx = internal.NewSchemaConfigContext(ctx, dduo.schemaConfig)
 	_node = &DictionaryDetail{config: dduo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

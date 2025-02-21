@@ -3,6 +3,7 @@
 package orderitem
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -682,6 +683,9 @@ func HasOrder() predicate.OrderItem {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderItem
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -690,6 +694,9 @@ func HasOrder() predicate.OrderItem {
 func HasOrderWith(preds ...predicate.Order) predicate.OrderItem {
 	return predicate.OrderItem(func(s *sql.Selector) {
 		step := newOrderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderItem
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

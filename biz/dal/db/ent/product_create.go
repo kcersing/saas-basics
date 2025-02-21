@@ -562,6 +562,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_node = &Product{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = pc.schemaConfig.Product
 	if id, ok := pc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -669,6 +670,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pc.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -685,6 +687,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pc.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -701,6 +704,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pc.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -717,6 +721,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pc.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -733,6 +738,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pc.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

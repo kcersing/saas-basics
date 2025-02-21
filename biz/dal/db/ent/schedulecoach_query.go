@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -75,6 +76,9 @@ func (scq *ScheduleCoachQuery) QuerySchedule() *ScheduleQuery {
 			sqlgraph.To(schedule.Table, schedule.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, schedulecoach.ScheduleTable, schedulecoach.ScheduleColumn),
 		)
+		schemaConfig := scq.schemaConfig
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		fromU = sqlgraph.SetNeighbors(scq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (scq *ScheduleCoachQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = scq.schemaConfig.ScheduleCoach
+	ctx = internal.NewSchemaConfigContext(ctx, scq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (scq *ScheduleCoachQuery) loadSchedule(ctx context.Context, query *Schedule
 
 func (scq *ScheduleCoachQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := scq.querySpec()
+	_spec.Node.Schema = scq.schemaConfig.ScheduleCoach
+	ctx = internal.NewSchemaConfigContext(ctx, scq.schemaConfig)
 	_spec.Node.Columns = scq.ctx.Fields
 	if len(scq.ctx.Fields) > 0 {
 		_spec.Unique = scq.ctx.Unique != nil && *scq.ctx.Unique
@@ -497,6 +505,9 @@ func (scq *ScheduleCoachQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if scq.ctx.Unique != nil && *scq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(scq.schemaConfig.ScheduleCoach)
+	ctx = internal.NewSchemaConfigContext(ctx, scq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range scq.predicates {
 		p(selector)
 	}

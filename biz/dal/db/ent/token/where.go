@@ -3,6 +3,7 @@
 package token
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -512,6 +513,9 @@ func HasOwner() predicate.Token {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, OwnerTable, OwnerColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Token
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -520,6 +524,9 @@ func HasOwner() predicate.Token {
 func HasOwnerWith(preds ...predicate.User) predicate.Token {
 	return predicate.Token(func(s *sql.Selector) {
 		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Token
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

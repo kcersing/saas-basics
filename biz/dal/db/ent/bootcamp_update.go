@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -715,6 +716,7 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bu.schemaConfig.BootcampParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := bu.mutation.RemovedBootcampParticipantsIDs(); len(nodes) > 0 && !bu.mutation.BootcampParticipantsCleared() {
@@ -728,6 +730,7 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bu.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -744,11 +747,14 @@ func (bu *BootcampUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bu.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = bu.schemaConfig.Bootcamp
+	ctx = internal.NewSchemaConfigContext(ctx, bu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bootcamp.Label}
@@ -1485,6 +1491,7 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = buo.schemaConfig.BootcampParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := buo.mutation.RemovedBootcampParticipantsIDs(); len(nodes) > 0 && !buo.mutation.BootcampParticipantsCleared() {
@@ -1498,6 +1505,7 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = buo.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1514,11 +1522,14 @@ func (buo *BootcampUpdateOne) sqlSave(ctx context.Context) (_node *Bootcamp, err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = buo.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = buo.schemaConfig.Bootcamp
+	ctx = internal.NewSchemaConfigContext(ctx, buo.schemaConfig)
 	_node = &Bootcamp{config: buo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

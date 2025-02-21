@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (mnq *MemberNoteQuery) QueryNotes() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membernote.NotesTable, membernote.NotesColumn),
 		)
+		schemaConfig := mnq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberNote
 		fromU = sqlgraph.SetNeighbors(mnq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (mnq *MemberNoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mnq.schemaConfig.MemberNote
+	ctx = internal.NewSchemaConfigContext(ctx, mnq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (mnq *MemberNoteQuery) loadNotes(ctx context.Context, query *MemberQuery, n
 
 func (mnq *MemberNoteQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mnq.querySpec()
+	_spec.Node.Schema = mnq.schemaConfig.MemberNote
+	ctx = internal.NewSchemaConfigContext(ctx, mnq.schemaConfig)
 	_spec.Node.Columns = mnq.ctx.Fields
 	if len(mnq.ctx.Fields) > 0 {
 		_spec.Unique = mnq.ctx.Unique != nil && *mnq.ctx.Unique
@@ -497,6 +505,9 @@ func (mnq *MemberNoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mnq.ctx.Unique != nil && *mnq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mnq.schemaConfig.MemberNote)
+	ctx = internal.NewSchemaConfigContext(ctx, mnq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mnq.predicates {
 		p(selector)
 	}

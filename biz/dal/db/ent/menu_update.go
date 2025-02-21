@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/predicate"
@@ -841,6 +842,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.RoleMenus
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedRolesIDs(); len(nodes) > 0 && !mu.mutation.RolesCleared() {
@@ -854,6 +856,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -870,6 +873,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -886,6 +890,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Menu
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.ParentIDs(); len(nodes) > 0 {
@@ -899,6 +904,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -915,6 +921,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Menu
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !mu.mutation.ChildrenCleared() {
@@ -928,6 +935,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -944,6 +952,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -960,6 +969,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MenuParam
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedParamsIDs(); len(nodes) > 0 && !mu.mutation.ParamsCleared() {
@@ -973,6 +983,7 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MenuParam
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -989,11 +1000,14 @@ func (mu *MenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MenuParam
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mu.schemaConfig.Menu
+	ctx = internal.NewSchemaConfigContext(ctx, mu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menu.Label}
@@ -1855,6 +1869,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.RoleMenus
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !muo.mutation.RolesCleared() {
@@ -1868,6 +1883,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1884,6 +1900,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1900,6 +1917,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Menu
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.ParentIDs(); len(nodes) > 0 {
@@ -1913,6 +1931,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1929,6 +1948,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Menu
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !muo.mutation.ChildrenCleared() {
@@ -1942,6 +1962,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1958,6 +1979,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1974,6 +1996,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MenuParam
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedParamsIDs(); len(nodes) > 0 && !muo.mutation.ParamsCleared() {
@@ -1987,6 +2010,7 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MenuParam
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2003,11 +2027,14 @@ func (muo *MenuUpdateOne) sqlSave(ctx context.Context) (_node *Menu, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MenuParam
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = muo.schemaConfig.Menu
+	ctx = internal.NewSchemaConfigContext(ctx, muo.schemaConfig)
 	_node = &Menu{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

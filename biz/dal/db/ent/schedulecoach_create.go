@@ -386,6 +386,7 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 		_node = &ScheduleCoach{config: scc.config}
 		_spec = sqlgraph.NewCreateSpec(schedulecoach.Table, sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = scc.schemaConfig.ScheduleCoach
 	if id, ok := scc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -469,6 +470,7 @@ func (scc *ScheduleCoachCreate) createSpec() (*ScheduleCoach, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = scc.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

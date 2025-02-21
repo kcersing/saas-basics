@@ -3,6 +3,7 @@
 package memberprofile
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1157,6 +1158,9 @@ func HasMember() predicate.MemberProfile {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, MemberTable, MemberColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProfile
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1165,6 +1169,9 @@ func HasMember() predicate.MemberProfile {
 func HasMemberWith(preds ...predicate.Member) predicate.MemberProfile {
 	return predicate.MemberProfile(func(s *sql.Selector) {
 		step := newMemberStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProfile
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

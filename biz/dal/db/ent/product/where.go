@@ -3,6 +3,7 @@
 package product
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1407,6 +1408,9 @@ func HasTags() predicate.Product {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.ProductTags
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1415,6 +1419,9 @@ func HasTags() predicate.Product {
 func HasTagsWith(preds ...predicate.DictionaryDetail) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newTagsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.ProductTags
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1430,6 +1437,9 @@ func HasContracts() predicate.Product {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ContractsTable, ContractsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contract
+		step.Edge.Schema = schemaConfig.ProductContracts
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1438,6 +1448,9 @@ func HasContracts() predicate.Product {
 func HasContractsWith(preds ...predicate.Contract) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newContractsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contract
+		step.Edge.Schema = schemaConfig.ProductContracts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1453,6 +1466,9 @@ func HasCourses() predicate.Product {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CoursesTable, CoursesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1461,6 +1477,9 @@ func HasCourses() predicate.Product {
 func HasCoursesWith(preds ...predicate.ProductCourses) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newCoursesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1476,6 +1495,9 @@ func HasLessons() predicate.Product {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, LessonsTable, LessonsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1484,6 +1506,9 @@ func HasLessons() predicate.Product {
 func HasLessonsWith(preds ...predicate.ProductCourses) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newLessonsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1499,6 +1524,9 @@ func HasProducts() predicate.Product {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1507,6 +1535,9 @@ func HasProducts() predicate.Product {
 func HasProductsWith(preds ...predicate.VenuePlace) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		step := newProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

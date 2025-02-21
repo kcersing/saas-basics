@@ -15,6 +15,7 @@ import (
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/order"
 	"time"
 
@@ -159,6 +160,25 @@ func (mc *MemberCreate) SetNillableAvatar(s *string) *MemberCreate {
 func (mc *MemberCreate) SetID(i int64) *MemberCreate {
 	mc.mutation.SetID(i)
 	return mc
+}
+
+// SetTokenID sets the "token" edge to the MemberToken entity by ID.
+func (mc *MemberCreate) SetTokenID(id int64) *MemberCreate {
+	mc.mutation.SetTokenID(id)
+	return mc
+}
+
+// SetNillableTokenID sets the "token" edge to the MemberToken entity by ID if the given value is not nil.
+func (mc *MemberCreate) SetNillableTokenID(id *int64) *MemberCreate {
+	if id != nil {
+		mc = mc.SetTokenID(*id)
+	}
+	return mc
+}
+
+// SetToken sets the "token" edge to the MemberToken entity.
+func (mc *MemberCreate) SetToken(m *MemberToken) *MemberCreate {
+	return mc.SetTokenID(m.ID)
 }
 
 // AddMemberProfileIDs adds the "member_profile" edge to the MemberProfile entity by IDs.
@@ -402,6 +422,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_node = &Member{config: mc.config}
 		_spec = sqlgraph.NewCreateSpec(member.Table, sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mc.schemaConfig.Member
 	if id, ok := mc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -442,6 +463,23 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
 	}
+	if nodes := mc.mutation.TokenIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   member.TokenTable,
+			Columns: []string{member.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mc.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := mc.mutation.MemberProfileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -453,6 +491,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -469,6 +508,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -485,6 +525,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -501,6 +542,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -517,6 +559,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -533,6 +576,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -549,6 +593,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -565,6 +610,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -581,6 +627,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -597,6 +644,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

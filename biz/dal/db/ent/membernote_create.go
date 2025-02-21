@@ -248,6 +248,7 @@ func (mnc *MemberNoteCreate) createSpec() (*MemberNote, *sqlgraph.CreateSpec) {
 		_node = &MemberNote{config: mnc.config}
 		_spec = sqlgraph.NewCreateSpec(membernote.Table, sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mnc.schemaConfig.MemberNote
 	if id, ok := mnc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -291,6 +292,7 @@ func (mnc *MemberNoteCreate) createSpec() (*MemberNote, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mnc.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

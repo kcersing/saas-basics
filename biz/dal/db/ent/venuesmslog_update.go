@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venuesmslog"
@@ -371,6 +372,7 @@ func (vslu *VenueSmsLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vslu.schemaConfig.VenueSmsLog
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vslu.mutation.VenueIDs(); len(nodes) > 0 {
@@ -384,11 +386,14 @@ func (vslu *VenueSmsLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vslu.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vslu.schemaConfig.VenueSmsLog
+	ctx = internal.NewSchemaConfigContext(ctx, vslu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, vslu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{venuesmslog.Label}
@@ -781,6 +786,7 @@ func (vsluo *VenueSmsLogUpdateOne) sqlSave(ctx context.Context) (_node *VenueSms
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vsluo.schemaConfig.VenueSmsLog
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vsluo.mutation.VenueIDs(); len(nodes) > 0 {
@@ -794,11 +800,14 @@ func (vsluo *VenueSmsLogUpdateOne) sqlSave(ctx context.Context) (_node *VenueSms
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vsluo.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vsluo.schemaConfig.VenueSmsLog
+	ctx = internal.NewSchemaConfigContext(ctx, vsluo.schemaConfig)
 	_node = &VenueSmsLog{config: vsluo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

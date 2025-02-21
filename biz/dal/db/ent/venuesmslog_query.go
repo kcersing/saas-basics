@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/venue"
 	"saas/biz/dal/db/ent/venuesmslog"
@@ -75,6 +76,9 @@ func (vslq *VenueSmsLogQuery) QueryVenue() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venuesmslog.VenueTable, venuesmslog.VenueColumn),
 		)
+		schemaConfig := vslq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		fromU = sqlgraph.SetNeighbors(vslq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (vslq *VenueSmsLogQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = vslq.schemaConfig.VenueSmsLog
+	ctx = internal.NewSchemaConfigContext(ctx, vslq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (vslq *VenueSmsLogQuery) loadVenue(ctx context.Context, query *VenueQuery, 
 
 func (vslq *VenueSmsLogQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := vslq.querySpec()
+	_spec.Node.Schema = vslq.schemaConfig.VenueSmsLog
+	ctx = internal.NewSchemaConfigContext(ctx, vslq.schemaConfig)
 	_spec.Node.Columns = vslq.ctx.Fields
 	if len(vslq.ctx.Fields) > 0 {
 		_spec.Unique = vslq.ctx.Unique != nil && *vslq.ctx.Unique
@@ -497,6 +505,9 @@ func (vslq *VenueSmsLogQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if vslq.ctx.Unique != nil && *vslq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(vslq.schemaConfig.VenueSmsLog)
+	ctx = internal.NewSchemaConfigContext(ctx, vslq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range vslq.predicates {
 		p(selector)
 	}

@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -78,6 +79,9 @@ func (cpq *ContestParticipantQuery) QueryContest() *ContestQuery {
 			sqlgraph.To(contest.Table, contest.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, contestparticipant.ContestTable, contestparticipant.ContestColumn),
 		)
+		schemaConfig := cpq.schemaConfig
+		step.To.Schema = schemaConfig.Contest
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -100,6 +104,9 @@ func (cpq *ContestParticipantQuery) QueryMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contestparticipant.MembersTable, contestparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := cpq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,6 +427,8 @@ func (cpq *ContestParticipantQuery) sqlAll(ctx context.Context, hooks ...queryHo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = cpq.schemaConfig.ContestParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -487,6 +496,7 @@ func (cpq *ContestParticipantQuery) loadMembers(ctx context.Context, query *Memb
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contestparticipant.MembersTable)
+		joinT.Schema(cpq.schemaConfig.MemberMemberContests)
 		s.Join(joinT).On(s.C(member.FieldID), joinT.C(contestparticipant.MembersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(contestparticipant.MembersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -538,6 +548,8 @@ func (cpq *ContestParticipantQuery) loadMembers(ctx context.Context, query *Memb
 
 func (cpq *ContestParticipantQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cpq.querySpec()
+	_spec.Node.Schema = cpq.schemaConfig.ContestParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
 	_spec.Node.Columns = cpq.ctx.Fields
 	if len(cpq.ctx.Fields) > 0 {
 		_spec.Unique = cpq.ctx.Unique != nil && *cpq.ctx.Unique
@@ -603,6 +615,9 @@ func (cpq *ContestParticipantQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	if cpq.ctx.Unique != nil && *cpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(cpq.schemaConfig.ContestParticipant)
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range cpq.predicates {
 		p(selector)
 	}

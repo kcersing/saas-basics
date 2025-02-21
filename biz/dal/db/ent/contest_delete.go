@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/contest"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (cd *ContestDelete) ExecX(ctx context.Context) int {
 
 func (cd *ContestDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(contest.Table, sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64))
+	_spec.Node.Schema = cd.schemaConfig.Contest
+	ctx = internal.NewSchemaConfigContext(ctx, cd.schemaConfig)
 	if ps := cd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

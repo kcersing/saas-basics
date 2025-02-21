@@ -59,6 +59,8 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+
+	"saas/biz/dal/db/ent/internal"
 )
 
 // Client is the client that holds all ent builders.
@@ -221,6 +223,8 @@ type (
 		hooks *hooks
 		// interceptors to execute on queries.
 		inters *inters
+		// schemaConfig contains alternative names for all tables.
+		schemaConfig SchemaConfig
 	}
 	// Option function to configure the client.
 	Option func(*config)
@@ -942,6 +946,9 @@ func (c *BootcampClient) QueryBootcampParticipants(b *Bootcamp) *BootcampPartici
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, bootcamp.BootcampParticipantsTable, bootcamp.BootcampParticipantsColumn),
 		)
+		schemaConfig := b.schemaConfig
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1091,6 +1098,9 @@ func (c *BootcampParticipantClient) QueryBootcamps(bp *BootcampParticipant) *Boo
 			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampsTable, bootcampparticipant.BootcampsColumn),
 		)
+		schemaConfig := bp.schemaConfig
+		step.To.Schema = schemaConfig.Bootcamp
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1107,6 +1117,9 @@ func (c *BootcampParticipantClient) QueryMembers(bp *BootcampParticipant) *Membe
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, bootcampparticipant.MembersTable, bootcampparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := bp.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		fromV = sqlgraph.Neighbors(bp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1256,6 +1269,9 @@ func (c *CommunityClient) QueryCommunityParticipants(co *Community) *CommunityPa
 			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, community.CommunityParticipantsTable, community.CommunityParticipantsColumn),
 		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1405,6 +1421,9 @@ func (c *CommunityParticipantClient) QueryCommunity(cp *CommunityParticipant) *C
 			sqlgraph.To(community.Table, community.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, communityparticipant.CommunityTable, communityparticipant.CommunityColumn),
 		)
+		schemaConfig := cp.schemaConfig
+		step.To.Schema = schemaConfig.Community
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1421,6 +1440,9 @@ func (c *CommunityParticipantClient) QueryMembers(cp *CommunityParticipant) *Mem
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, communityparticipant.MembersTable, communityparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := cp.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1570,6 +1592,9 @@ func (c *ContestClient) QueryContestParticipants(co *Contest) *ContestParticipan
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contest.ContestParticipantsTable, contest.ContestParticipantsColumn),
 		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1719,6 +1744,9 @@ func (c *ContestParticipantClient) QueryContest(cp *ContestParticipant) *Contest
 			sqlgraph.To(contest.Table, contest.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, contestparticipant.ContestTable, contestparticipant.ContestColumn),
 		)
+		schemaConfig := cp.schemaConfig
+		step.To.Schema = schemaConfig.Contest
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1735,6 +1763,9 @@ func (c *ContestParticipantClient) QueryMembers(cp *ContestParticipant) *MemberQ
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contestparticipant.MembersTable, contestparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := cp.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		fromV = sqlgraph.Neighbors(cp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1884,6 +1915,9 @@ func (c *ContractClient) QueryProducts(co *Contract) *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contract.ProductsTable, contract.ProductsPrimaryKey...),
 		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductContracts
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2033,6 +2067,9 @@ func (c *DictionaryClient) QueryDictionaryDetails(d *Dictionary) *DictionaryDeta
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, dictionary.DictionaryDetailsTable, dictionary.DictionaryDetailsColumn),
 		)
+		schemaConfig := d.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.DictionaryDetail
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2182,6 +2219,9 @@ func (c *DictionaryDetailClient) QueryDictionary(dd *DictionaryDetail) *Dictiona
 			sqlgraph.To(dictionary.Table, dictionary.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, dictionarydetail.DictionaryTable, dictionarydetail.DictionaryColumn),
 		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.Dictionary
+		step.Edge.Schema = schemaConfig.DictionaryDetail
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2198,6 +2238,9 @@ func (c *DictionaryDetailClient) QueryUsers(dd *DictionaryDetail) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersPrimaryKey...),
 		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTags
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2214,6 +2257,9 @@ func (c *DictionaryDetailClient) QueryProducts(dd *DictionaryDetail) *ProductQue
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductTags
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2363,6 +2409,9 @@ func (c *EntryLogsClient) QueryVenues(el *EntryLogs) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.VenuesTable, entrylogs.VenuesColumn),
 		)
+		schemaConfig := el.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2379,6 +2428,9 @@ func (c *EntryLogsClient) QueryMembers(el *EntryLogs) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MembersTable, entrylogs.MembersColumn),
 		)
+		schemaConfig := el.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2395,6 +2447,9 @@ func (c *EntryLogsClient) QueryUsers(el *EntryLogs) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
 		)
+		schemaConfig := el.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2411,6 +2466,9 @@ func (c *EntryLogsClient) QueryMemberProducts(el *EntryLogs) *MemberProductQuery
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
 		)
+		schemaConfig := el.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(el.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2683,6 +2741,25 @@ func (c *MemberClient) GetX(ctx context.Context, id int64) *Member {
 	return obj
 }
 
+// QueryToken queries the token edge of a Member.
+func (c *MemberClient) QueryToken(m *Member) *MemberTokenQuery {
+	query := (&MemberTokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, id),
+			sqlgraph.To(membertoken.Table, membertoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, member.TokenTable, member.TokenColumn),
+		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberToken
+		step.Edge.Schema = schemaConfig.MemberToken
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMemberProfile queries the member_profile edge of a Member.
 func (c *MemberClient) QueryMemberProfile(m *Member) *MemberProfileQuery {
 	query := (&MemberProfileClient{config: c.config}).Query()
@@ -2693,6 +2770,9 @@ func (c *MemberClient) QueryMemberProfile(m *Member) *MemberProfileQuery {
 			sqlgraph.To(memberprofile.Table, memberprofile.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProfileTable, member.MemberProfileColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberProfile
+		step.Edge.Schema = schemaConfig.MemberProfile
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2709,6 +2789,9 @@ func (c *MemberClient) QueryMemberDetails(m *Member) *MemberDetailsQuery {
 			sqlgraph.To(memberdetails.Table, memberdetails.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberDetailsTable, member.MemberDetailsColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberDetails
+		step.Edge.Schema = schemaConfig.MemberDetails
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2725,6 +2808,9 @@ func (c *MemberClient) QueryMemberNotes(m *Member) *MemberNoteQuery {
 			sqlgraph.To(membernote.Table, membernote.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberNotesTable, member.MemberNotesColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberNote
+		step.Edge.Schema = schemaConfig.MemberNote
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2741,6 +2827,9 @@ func (c *MemberClient) QueryMemberOrders(m *Member) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberOrdersTable, member.MemberOrdersColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2757,6 +2846,9 @@ func (c *MemberClient) QueryMemberProducts(m *Member) *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProductsTable, member.MemberProductsColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProduct
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2773,6 +2865,9 @@ func (c *MemberClient) QueryMemberEntry(m *Member) *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberEntryTable, member.MemberEntryColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2789,6 +2884,9 @@ func (c *MemberClient) QueryMemberContents(m *Member) *MemberContractQuery {
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberContentsTable, member.MemberContentsColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2805,6 +2903,9 @@ func (c *MemberClient) QueryMemberContests(m *Member) *ContestParticipantQuery {
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberContestsTable, member.MemberContestsPrimaryKey...),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2821,6 +2922,9 @@ func (c *MemberClient) QueryMemberBootcamps(m *Member) *BootcampParticipantQuery
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberBootcampsTable, member.MemberBootcampsPrimaryKey...),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2837,6 +2941,9 @@ func (c *MemberClient) QueryMemberCommunitys(m *Member) *CommunityParticipantQue
 			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberCommunitysTable, member.MemberCommunitysPrimaryKey...),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2986,6 +3093,9 @@ func (c *MemberContractClient) QueryContent(mc *MemberContract) *MemberContractC
 			sqlgraph.To(membercontractcontent.Table, membercontractcontent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, membercontract.ContentTable, membercontract.ContentColumn),
 		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.MemberContractContent
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3002,6 +3112,9 @@ func (c *MemberContractClient) QueryMember(mc *MemberContract) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberTable, membercontract.MemberColumn),
 		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3018,6 +3131,9 @@ func (c *MemberContractClient) QueryOrder(mc *MemberContract) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.OrderTable, membercontract.OrderColumn),
 		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3034,6 +3150,9 @@ func (c *MemberContractClient) QueryMemberProduct(mc *MemberContract) *MemberPro
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberProductTable, membercontract.MemberProductColumn),
 		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3183,6 +3302,9 @@ func (c *MemberContractContentClient) QueryContract(mcc *MemberContractContent) 
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontractcontent.ContractTable, membercontractcontent.ContractColumn),
 		)
+		schemaConfig := mcc.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		fromV = sqlgraph.Neighbors(mcc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3332,6 +3454,9 @@ func (c *MemberDetailsClient) QueryMember(md *MemberDetails) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberdetails.MemberTable, memberdetails.MemberColumn),
 		)
+		schemaConfig := md.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberDetails
 		fromV = sqlgraph.Neighbors(md.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3481,6 +3606,9 @@ func (c *MemberNoteClient) QueryNotes(mn *MemberNote) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membernote.NotesTable, membernote.NotesColumn),
 		)
+		schemaConfig := mn.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberNote
 		fromV = sqlgraph.Neighbors(mn.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3630,6 +3758,9 @@ func (c *MemberProductClient) QueryMembers(mp *MemberProduct) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.MembersTable, memberproduct.MembersColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProduct
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3646,6 +3777,9 @@ func (c *MemberProductClient) QueryMemberProductEntry(mp *MemberProduct) *EntryL
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3662,6 +3796,9 @@ func (c *MemberProductClient) QueryMemberProductContents(mp *MemberProduct) *Mem
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductContentsTable, memberproduct.MemberProductContentsColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3678,6 +3815,9 @@ func (c *MemberProductClient) QueryMemberCourses(mp *MemberProduct) *MemberProdu
 			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberCoursesTable, memberproduct.MemberCoursesColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.MemberProductCourses
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3694,6 +3834,9 @@ func (c *MemberProductClient) QueryMemberLessons(mp *MemberProduct) *MemberProdu
 			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberLessonsTable, memberproduct.MemberLessonsColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.MemberProductCourses
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3843,6 +3986,9 @@ func (c *MemberProductCoursesClient) QueryNodeC(mpc *MemberProductCourses) *Memb
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeCTable, memberproductcourses.NodeCColumn),
 		)
+		schemaConfig := mpc.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3859,6 +4005,9 @@ func (c *MemberProductCoursesClient) QueryNodeL(mpc *MemberProductCourses) *Memb
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeLTable, memberproductcourses.NodeLColumn),
 		)
+		schemaConfig := mpc.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromV = sqlgraph.Neighbors(mpc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4008,6 +4157,9 @@ func (c *MemberProfileClient) QueryMember(mp *MemberProfile) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberprofile.MemberTable, memberprofile.MemberColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProfile
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4145,6 +4297,25 @@ func (c *MemberTokenClient) GetX(ctx context.Context, id int64) *MemberToken {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryOwner queries the owner edge of a MemberToken.
+func (c *MemberTokenClient) QueryOwner(mt *MemberToken) *MemberQuery {
+	query := (&MemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membertoken.Table, membertoken.FieldID, id),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, membertoken.OwnerTable, membertoken.OwnerColumn),
+		)
+		schemaConfig := mt.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberToken
+		fromV = sqlgraph.Neighbors(mt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -4290,6 +4461,9 @@ func (c *MenuClient) QueryRoles(m *Menu) *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, menu.RolesTable, menu.RolesPrimaryKey...),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.RoleMenus
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4306,6 +4480,9 @@ func (c *MenuClient) QueryParent(m *Menu) *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, menu.ParentTable, menu.ParentColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.Menu
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4322,6 +4499,9 @@ func (c *MenuClient) QueryChildren(m *Menu) *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, menu.ChildrenTable, menu.ChildrenColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.Menu
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4338,6 +4518,9 @@ func (c *MenuClient) QueryParams(m *Menu) *MenuParamQuery {
 			sqlgraph.To(menuparam.Table, menuparam.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, menu.ParamsTable, menu.ParamsColumn),
 		)
+		schemaConfig := m.schemaConfig
+		step.To.Schema = schemaConfig.MenuParam
+		step.Edge.Schema = schemaConfig.MenuParam
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4487,6 +4670,9 @@ func (c *MenuParamClient) QueryMenus(mp *MenuParam) *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, menuparam.MenusTable, menuparam.MenusColumn),
 		)
+		schemaConfig := mp.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.MenuParam
 		fromV = sqlgraph.Neighbors(mp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4769,6 +4955,9 @@ func (c *OrderClient) QueryAmount(o *Order) *OrderAmountQuery {
 			sqlgraph.To(orderamount.Table, orderamount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.AmountTable, order.AmountColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrderAmount
+		step.Edge.Schema = schemaConfig.OrderAmount
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4785,6 +4974,9 @@ func (c *OrderClient) QueryItem(o *Order) *OrderItemQuery {
 			sqlgraph.To(orderitem.Table, orderitem.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.ItemTable, order.ItemColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrderItem
+		step.Edge.Schema = schemaConfig.OrderItem
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4801,6 +4993,9 @@ func (c *OrderClient) QueryPay(o *Order) *OrderPayQuery {
 			sqlgraph.To(orderpay.Table, orderpay.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.PayTable, order.PayColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrderPay
+		step.Edge.Schema = schemaConfig.OrderPay
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4817,6 +5012,9 @@ func (c *OrderClient) QueryOrderContents(o *Order) *MemberContractQuery {
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.OrderContentsTable, order.OrderContentsColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4833,6 +5031,9 @@ func (c *OrderClient) QuerySales(o *Order) *OrderSalesQuery {
 			sqlgraph.To(ordersales.Table, ordersales.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrderSales
+		step.Edge.Schema = schemaConfig.OrderSales
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4849,6 +5050,9 @@ func (c *OrderClient) QueryOrderVenues(o *Order) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderVenuesTable, order.OrderVenuesColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4865,6 +5069,9 @@ func (c *OrderClient) QueryOrderMembers(o *Order) *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderMembersTable, order.OrderMembersColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4881,6 +5088,9 @@ func (c *OrderClient) QueryOrderCreates(o *Order) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderCreatesTable, order.OrderCreatesColumn),
 		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5030,6 +5240,9 @@ func (c *OrderAmountClient) QueryOrder(oa *OrderAmount) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orderamount.OrderTable, orderamount.OrderColumn),
 		)
+		schemaConfig := oa.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderAmount
 		fromV = sqlgraph.Neighbors(oa.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5179,6 +5392,9 @@ func (c *OrderItemClient) QueryOrder(oi *OrderItem) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.OrderTable, orderitem.OrderColumn),
 		)
+		schemaConfig := oi.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderItem
 		fromV = sqlgraph.Neighbors(oi.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5328,6 +5544,9 @@ func (c *OrderPayClient) QueryOrder(op *OrderPay) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.OrderTable, orderpay.OrderColumn),
 		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderPay
 		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5477,6 +5696,9 @@ func (c *OrderSalesClient) QueryOrder(os *OrderSales) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ordersales.OrderTable, ordersales.OrderColumn),
 		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderSales
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5626,6 +5848,9 @@ func (c *ProductClient) QueryTags(pr *Product) *DictionaryDetailQuery {
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, product.TagsTable, product.TagsPrimaryKey...),
 		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.ProductTags
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5642,6 +5867,9 @@ func (c *ProductClient) QueryContracts(pr *Product) *ContractQuery {
 			sqlgraph.To(contract.Table, contract.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, product.ContractsTable, product.ContractsPrimaryKey...),
 		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Contract
+		step.Edge.Schema = schemaConfig.ProductContracts
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5658,6 +5886,9 @@ func (c *ProductClient) QueryCourses(pr *Product) *ProductCoursesQuery {
 			sqlgraph.To(productcourses.Table, productcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, product.CoursesTable, product.CoursesColumn),
 		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5674,6 +5905,9 @@ func (c *ProductClient) QueryLessons(pr *Product) *ProductCoursesQuery {
 			sqlgraph.To(productcourses.Table, productcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, product.LessonsTable, product.LessonsColumn),
 		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5690,6 +5924,9 @@ func (c *ProductClient) QueryProducts(pr *Product) *VenuePlaceQuery {
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, product.ProductsTable, product.ProductsPrimaryKey...),
 		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5839,6 +6076,9 @@ func (c *ProductCoursesClient) QueryNodeC(pc *ProductCourses) *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeCTable, productcourses.NodeCColumn),
 		)
+		schemaConfig := pc.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5855,6 +6095,9 @@ func (c *ProductCoursesClient) QueryNodeL(pc *ProductCourses) *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeLTable, productcourses.NodeLColumn),
 		)
+		schemaConfig := pc.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6004,6 +6247,9 @@ func (c *RoleClient) QueryMenus(r *Role) *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, role.MenusTable, role.MenusPrimaryKey...),
 		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.RoleMenus
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6020,6 +6266,9 @@ func (c *RoleClient) QueryUsers(r *Role) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, role.UsersTable, role.UsersPrimaryKey...),
 		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserRoles
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6036,6 +6285,9 @@ func (c *RoleClient) QueryVenues(r *Role) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, role.VenuesTable, role.VenuesPrimaryKey...),
 		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueRoles
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6185,6 +6437,9 @@ func (c *ScheduleClient) QueryMembers(s *Schedule) *ScheduleMemberQuery {
 			sqlgraph.To(schedulemember.Table, schedulemember.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, schedule.MembersTable, schedule.MembersColumn),
 		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.ScheduleMember
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6201,6 +6456,9 @@ func (c *ScheduleClient) QueryCoachs(s *Schedule) *ScheduleCoachQuery {
 			sqlgraph.To(schedulecoach.Table, schedulecoach.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, schedule.CoachsTable, schedule.CoachsColumn),
 		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.ScheduleCoach
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6350,6 +6608,9 @@ func (c *ScheduleCoachClient) QuerySchedule(sc *ScheduleCoach) *ScheduleQuery {
 			sqlgraph.To(schedule.Table, schedule.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, schedulecoach.ScheduleTable, schedulecoach.ScheduleColumn),
 		)
+		schemaConfig := sc.schemaConfig
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		fromV = sqlgraph.Neighbors(sc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6499,6 +6760,9 @@ func (c *ScheduleMemberClient) QuerySchedule(sm *ScheduleMember) *ScheduleQuery 
 			sqlgraph.To(schedule.Table, schedule.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, schedulemember.ScheduleTable, schedulemember.ScheduleColumn),
 		)
+		schemaConfig := sm.schemaConfig
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		fromV = sqlgraph.Neighbors(sm.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6648,6 +6912,9 @@ func (c *TokenClient) QueryOwner(t *Token) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
 		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Token
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6797,6 +7064,9 @@ func (c *UserClient) QueryToken(u *User) *TokenQuery {
 			sqlgraph.To(token.Table, token.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, user.TokenTable, user.TokenColumn),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Token
+		step.Edge.Schema = schemaConfig.Token
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6813,6 +7083,9 @@ func (c *UserClient) QueryTags(u *User) *DictionaryDetailQuery {
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.TagsTable, user.TagsPrimaryKey...),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.UserTags
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6829,6 +7102,9 @@ func (c *UserClient) QueryCreatedOrders(u *User) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.CreatedOrdersTable, user.CreatedOrdersColumn),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6845,6 +7121,9 @@ func (c *UserClient) QueryUserEntry(u *User) *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.UserEntryTable, user.UserEntryColumn),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6861,6 +7140,9 @@ func (c *UserClient) QueryVenues(u *User) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.VenuesTable, user.VenuesPrimaryKey...),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.UserVenues
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6877,6 +7159,9 @@ func (c *UserClient) QueryRoles(u *User) *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.RolesTable, user.RolesPrimaryKey...),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.UserRoles
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6893,6 +7178,9 @@ func (c *UserClient) QueryUserTimePeriod(u *User) *UserTimePeriodQuery {
 			sqlgraph.To(usertimeperiod.Table, usertimeperiod.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.UserTimePeriodTable, user.UserTimePeriodColumn),
 		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.UserTimePeriod
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7042,6 +7330,9 @@ func (c *UserTimePeriodClient) QueryUsers(utp *UserTimePeriod) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, usertimeperiod.UsersTable, usertimeperiod.UsersColumn),
 		)
+		schemaConfig := utp.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		fromV = sqlgraph.Neighbors(utp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7191,6 +7482,9 @@ func (c *VenueClient) QueryPlaces(v *Venue) *VenuePlaceQuery {
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.PlacesTable, venue.PlacesColumn),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlace
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7207,6 +7501,9 @@ func (c *VenueClient) QueryVenueOrders(v *Venue) *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueOrdersTable, venue.VenueOrdersColumn),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7223,6 +7520,9 @@ func (c *VenueClient) QueryVenueEntry(v *Venue) *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueEntryTable, venue.VenueEntryColumn),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7239,6 +7539,9 @@ func (c *VenueClient) QueryUsers(v *Venue) *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, venue.UsersTable, venue.UsersPrimaryKey...),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserVenues
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7255,6 +7558,9 @@ func (c *VenueClient) QuerySms(v *Venue) *VenueSmsQuery {
 			sqlgraph.To(venuesms.Table, venuesms.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmsTable, venue.SmsColumn),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.VenueSms
+		step.Edge.Schema = schemaConfig.VenueSms
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7271,6 +7577,9 @@ func (c *VenueClient) QuerySmslog(v *Venue) *VenueSmsLogQuery {
 			sqlgraph.To(venuesmslog.Table, venuesmslog.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmslogTable, venue.SmslogColumn),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.VenueSmsLog
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7287,6 +7596,9 @@ func (c *VenueClient) QueryRoles(v *Venue) *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, venue.RolesTable, venue.RolesPrimaryKey...),
 		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.VenueRoles
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7436,6 +7748,9 @@ func (c *VenuePlaceClient) QueryVenue(vp *VenuePlace) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venueplace.VenueTable, venueplace.VenueColumn),
 		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenuePlace
 		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7452,6 +7767,9 @@ func (c *VenuePlaceClient) QueryProducts(vp *VenuePlace) *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, venueplace.ProductsTable, venueplace.ProductsPrimaryKey...),
 		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7601,6 +7919,9 @@ func (c *VenueSmsClient) QueryVenue(vs *VenueSms) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venuesms.VenueTable, venuesms.VenueColumn),
 		)
+		schemaConfig := vs.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueSms
 		fromV = sqlgraph.Neighbors(vs.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7750,6 +8071,9 @@ func (c *VenueSmsLogClient) QueryVenue(vsl *VenueSmsLog) *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venuesmslog.VenueTable, venuesmslog.VenueColumn),
 		)
+		schemaConfig := vsl.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		fromV = sqlgraph.Neighbors(vsl.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7803,3 +8127,15 @@ type (
 		VenueSmsLog []ent.Interceptor
 	}
 )
+
+// SchemaConfig represents alternative schema names for all tables
+// that can be passed at runtime.
+type SchemaConfig = internal.SchemaConfig
+
+// AlternateSchemas allows alternate schema names to be
+// passed into ent operations.
+func AlternateSchema(schemaConfig SchemaConfig) Option {
+	return func(c *config) {
+		c.schemaConfig = schemaConfig
+	}
+}

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/logs"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -342,6 +343,8 @@ func (lq *LogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Logs, e
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = lq.schemaConfig.Logs
+	ctx = internal.NewSchemaConfigContext(ctx, lq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -356,6 +359,8 @@ func (lq *LogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Logs, e
 
 func (lq *LogsQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := lq.querySpec()
+	_spec.Node.Schema = lq.schemaConfig.Logs
+	ctx = internal.NewSchemaConfigContext(ctx, lq.schemaConfig)
 	_spec.Node.Columns = lq.ctx.Fields
 	if len(lq.ctx.Fields) > 0 {
 		_spec.Unique = lq.ctx.Unique != nil && *lq.ctx.Unique
@@ -418,6 +423,9 @@ func (lq *LogsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if lq.ctx.Unique != nil && *lq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(lq.schemaConfig.Logs)
+	ctx = internal.NewSchemaConfigContext(ctx, lq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range lq.predicates {
 		p(selector)
 	}

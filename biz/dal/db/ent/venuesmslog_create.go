@@ -262,6 +262,7 @@ func (vslc *VenueSmsLogCreate) createSpec() (*VenueSmsLog, *sqlgraph.CreateSpec)
 		_node = &VenueSmsLog{config: vslc.config}
 		_spec = sqlgraph.NewCreateSpec(venuesmslog.Table, sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = vslc.schemaConfig.VenueSmsLog
 	if id, ok := vslc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -321,6 +322,7 @@ func (vslc *VenueSmsLogCreate) createSpec() (*VenueSmsLog, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vslc.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

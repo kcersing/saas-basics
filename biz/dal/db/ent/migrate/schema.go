@@ -774,12 +774,21 @@ var (
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
 		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
+		{Name: "member_token", Type: field.TypeInt64, Unique: true, Nullable: true},
 	}
 	// MemberTokenTable holds the schema information for the "member_token" table.
 	MemberTokenTable = &schema.Table{
 		Name:       "member_token",
 		Columns:    MemberTokenColumns,
 		PrimaryKey: []*schema.Column{MemberTokenColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "member_token_member_token",
+				Columns:    []*schema.Column{MemberTokenColumns[9]},
+				RefColumns: []*schema.Column{MemberColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "membertoken_member_id",
@@ -2000,6 +2009,7 @@ func init() {
 		Table:   "member_profile",
 		Options: "AUTO_INCREMENT = 100000",
 	}
+	MemberTokenTable.ForeignKeys[0].RefTable = MemberTable
 	MemberTokenTable.Annotation = &entsql.Annotation{
 		Table: "member_token",
 	}

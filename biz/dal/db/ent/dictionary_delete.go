@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/dictionary"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (dd *DictionaryDelete) ExecX(ctx context.Context) int {
 
 func (dd *DictionaryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64))
+	_spec.Node.Schema = dd.schemaConfig.Dictionary
+	ctx = internal.NewSchemaConfigContext(ctx, dd.schemaConfig)
 	if ps := dd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

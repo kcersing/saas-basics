@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (mtd *MemberTokenDelete) ExecX(ctx context.Context) int {
 
 func (mtd *MemberTokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(membertoken.Table, sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64))
+	_spec.Node.Schema = mtd.schemaConfig.MemberToken
+	ctx = internal.NewSchemaConfigContext(ctx, mtd.schemaConfig)
 	if ps := mtd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

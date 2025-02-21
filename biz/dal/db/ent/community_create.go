@@ -456,6 +456,7 @@ func (cc *CommunityCreate) createSpec() (*Community, *sqlgraph.CreateSpec) {
 		_node = &Community{config: cc.config}
 		_spec = sqlgraph.NewCreateSpec(community.Table, sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = cc.schemaConfig.Community
 	if id, ok := cc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -559,6 +560,7 @@ func (cc *CommunityCreate) createSpec() (*Community, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cc.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

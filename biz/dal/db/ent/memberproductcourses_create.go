@@ -293,6 +293,7 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 		_node = &MemberProductCourses{config: mpcc.config}
 		_spec = sqlgraph.NewCreateSpec(memberproductcourses.Table, sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mpcc.schemaConfig.MemberProductCourses
 	if id, ok := mpcc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -340,6 +341,7 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcc.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -357,6 +359,7 @@ func (mpcc *MemberProductCoursesCreate) createSpec() (*MemberProductCourses, *sq
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcc.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

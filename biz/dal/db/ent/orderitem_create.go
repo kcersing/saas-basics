@@ -282,6 +282,7 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 		_node = &OrderItem{config: oic.config}
 		_spec = sqlgraph.NewCreateSpec(orderitem.Table, sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = oic.schemaConfig.OrderItem
 	if id, ok := oic.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -341,6 +342,7 @@ func (oic *OrderItemCreate) createSpec() (*OrderItem, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oic.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/ordersales"
 	"saas/biz/dal/db/ent/predicate"
@@ -358,6 +359,7 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = osu.schemaConfig.OrderSales
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := osu.mutation.OrderIDs(); len(nodes) > 0 {
@@ -371,11 +373,14 @@ func (osu *OrderSalesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = osu.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = osu.schemaConfig.OrderSales
+	ctx = internal.NewSchemaConfigContext(ctx, osu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, osu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{ordersales.Label}
@@ -755,6 +760,7 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = osuo.schemaConfig.OrderSales
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := osuo.mutation.OrderIDs(); len(nodes) > 0 {
@@ -768,11 +774,14 @@ func (osuo *OrderSalesUpdateOne) sqlSave(ctx context.Context) (_node *OrderSales
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = osuo.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = osuo.schemaConfig.OrderSales
+	ctx = internal.NewSchemaConfigContext(ctx, osuo.schemaConfig)
 	_node = &OrderSales{config: osuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

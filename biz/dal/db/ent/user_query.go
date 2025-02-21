@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/dictionarydetail"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
@@ -88,6 +89,9 @@ func (uq *UserQuery) QueryToken() *TokenQuery {
 			sqlgraph.To(token.Table, token.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, user.TokenTable, user.TokenColumn),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Token
+		step.Edge.Schema = schemaConfig.Token
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -110,6 +114,9 @@ func (uq *UserQuery) QueryTags() *DictionaryDetailQuery {
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.TagsTable, user.TagsPrimaryKey...),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.UserTags
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -132,6 +139,9 @@ func (uq *UserQuery) QueryCreatedOrders() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.CreatedOrdersTable, user.CreatedOrdersColumn),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -154,6 +164,9 @@ func (uq *UserQuery) QueryUserEntry() *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.UserEntryTable, user.UserEntryColumn),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -176,6 +189,9 @@ func (uq *UserQuery) QueryVenues() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.VenuesTable, user.VenuesPrimaryKey...),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.UserVenues
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,6 +214,9 @@ func (uq *UserQuery) QueryRoles() *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.RolesTable, user.RolesPrimaryKey...),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.UserRoles
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -220,6 +239,9 @@ func (uq *UserQuery) QueryUserTimePeriod() *UserTimePeriodQuery {
 			sqlgraph.To(usertimeperiod.Table, usertimeperiod.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.UserTimePeriodTable, user.UserTimePeriodColumn),
 		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.UserTimePeriod
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -605,6 +627,8 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = uq.schemaConfig.User
+	ctx = internal.NewSchemaConfigContext(ctx, uq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -706,6 +730,7 @@ func (uq *UserQuery) loadTags(ctx context.Context, query *DictionaryDetailQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.TagsTable)
+		joinT.Schema(uq.schemaConfig.UserTags)
 		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(user.TagsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.TagsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -827,6 +852,7 @@ func (uq *UserQuery) loadVenues(ctx context.Context, query *VenueQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.VenuesTable)
+		joinT.Schema(uq.schemaConfig.UserVenues)
 		s.Join(joinT).On(s.C(venue.FieldID), joinT.C(user.VenuesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.VenuesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -888,6 +914,7 @@ func (uq *UserQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*U
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.RolesTable)
+		joinT.Schema(uq.schemaConfig.UserRoles)
 		s.Join(joinT).On(s.C(role.FieldID), joinT.C(user.RolesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.RolesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -969,6 +996,8 @@ func (uq *UserQuery) loadUserTimePeriod(ctx context.Context, query *UserTimePeri
 
 func (uq *UserQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := uq.querySpec()
+	_spec.Node.Schema = uq.schemaConfig.User
+	ctx = internal.NewSchemaConfigContext(ctx, uq.schemaConfig)
 	_spec.Node.Columns = uq.ctx.Fields
 	if len(uq.ctx.Fields) > 0 {
 		_spec.Unique = uq.ctx.Unique != nil && *uq.ctx.Unique
@@ -1031,6 +1060,9 @@ func (uq *UserQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if uq.ctx.Unique != nil && *uq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(uq.schemaConfig.User)
+	ctx = internal.NewSchemaConfigContext(ctx, uq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range uq.predicates {
 		p(selector)
 	}

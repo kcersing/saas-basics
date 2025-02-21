@@ -288,6 +288,7 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 		_node = &OrderPay{config: opc.config}
 		_spec = sqlgraph.NewCreateSpec(orderpay.Table, sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = opc.schemaConfig.OrderPay
 	if id, ok := opc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -351,6 +352,7 @@ func (opc *OrderPayCreate) createSpec() (*OrderPay, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = opc.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

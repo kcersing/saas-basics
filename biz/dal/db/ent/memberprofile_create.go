@@ -390,6 +390,7 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 		_node = &MemberProfile{config: mpc.config}
 		_spec = sqlgraph.NewCreateSpec(memberprofile.Table, sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mpc.schemaConfig.MemberProfile
 	if id, ok := mpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -473,6 +474,7 @@ func (mpc *MemberProfileCreate) createSpec() (*MemberProfile, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

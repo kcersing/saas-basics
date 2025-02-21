@@ -226,6 +226,7 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 		_node = &Dictionary{config: dc.config}
 		_spec = sqlgraph.NewCreateSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = dc.schemaConfig.Dictionary
 	if id, ok := dc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -273,6 +274,7 @@ func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = dc.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

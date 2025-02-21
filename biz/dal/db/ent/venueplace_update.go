@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/venue"
@@ -612,6 +613,7 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpu.schemaConfig.VenuePlace
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpu.mutation.VenueIDs(); len(nodes) > 0 {
@@ -625,6 +627,7 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpu.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -641,6 +644,7 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpu.schemaConfig.VenuePlaceProducts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !vpu.mutation.ProductsCleared() {
@@ -654,6 +658,7 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpu.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -670,11 +675,14 @@ func (vpu *VenuePlaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpu.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vpu.schemaConfig.VenuePlace
+	ctx = internal.NewSchemaConfigContext(ctx, vpu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, vpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{venueplace.Label}
@@ -1305,6 +1313,7 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpuo.schemaConfig.VenuePlace
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpuo.mutation.VenueIDs(); len(nodes) > 0 {
@@ -1318,6 +1327,7 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpuo.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1334,6 +1344,7 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpuo.schemaConfig.VenuePlaceProducts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpuo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !vpuo.mutation.ProductsCleared() {
@@ -1347,6 +1358,7 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpuo.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1363,11 +1375,14 @@ func (vpuo *VenuePlaceUpdateOne) sqlSave(ctx context.Context) (_node *VenuePlace
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vpuo.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vpuo.schemaConfig.VenuePlace
+	ctx = internal.NewSchemaConfigContext(ctx, vpuo.schemaConfig)
 	_node = &VenuePlace{config: vpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

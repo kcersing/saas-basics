@@ -226,6 +226,7 @@ func (mccc *MemberContractContentCreate) createSpec() (*MemberContractContent, *
 		_node = &MemberContractContent{config: mccc.config}
 		_spec = sqlgraph.NewCreateSpec(membercontractcontent.Table, sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mccc.schemaConfig.MemberContractContent
 	if id, ok := mccc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -265,6 +266,7 @@ func (mccc *MemberContractContentCreate) createSpec() (*MemberContractContent, *
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mccc.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/contract"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"time"
@@ -343,6 +344,7 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ProductContracts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !cu.mutation.ProductsCleared() {
@@ -356,6 +358,7 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -372,11 +375,14 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cu.schemaConfig.Contract
+	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contract.Label}
@@ -741,6 +747,7 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ProductContracts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cuo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !cuo.mutation.ProductsCleared() {
@@ -754,6 +761,7 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -770,11 +778,14 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cuo.schemaConfig.Contract
+	ctx = internal.NewSchemaConfigContext(ctx, cuo.schemaConfig)
 	_node = &Contract{config: cuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

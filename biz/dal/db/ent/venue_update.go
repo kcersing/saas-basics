@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
@@ -793,6 +794,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenuePlace
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedPlacesIDs(); len(nodes) > 0 && !vu.mutation.PlacesCleared() {
@@ -806,6 +808,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -822,6 +825,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -838,6 +842,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedVenueOrdersIDs(); len(nodes) > 0 && !vu.mutation.VenueOrdersCleared() {
@@ -851,6 +856,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -867,6 +873,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -883,6 +890,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedVenueEntryIDs(); len(nodes) > 0 && !vu.mutation.VenueEntryCleared() {
@@ -896,6 +904,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -912,6 +921,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -928,6 +938,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.UserVenues
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !vu.mutation.UsersCleared() {
@@ -941,6 +952,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.UserVenues
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -957,6 +969,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.UserVenues
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -973,6 +986,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSms
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedSmsIDs(); len(nodes) > 0 && !vu.mutation.SmsCleared() {
@@ -986,6 +1000,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1002,6 +1017,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1018,6 +1034,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSmsLog
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedSmslogIDs(); len(nodes) > 0 && !vu.mutation.SmslogCleared() {
@@ -1031,6 +1048,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1047,6 +1065,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1063,6 +1082,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vu.mutation.RemovedRolesIDs(); len(nodes) > 0 && !vu.mutation.RolesCleared() {
@@ -1076,6 +1096,7 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1092,11 +1113,14 @@ func (vu *VenueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vu.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vu.schemaConfig.Venue
+	ctx = internal.NewSchemaConfigContext(ctx, vu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, vu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{venue.Label}
@@ -1904,6 +1928,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenuePlace
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedPlacesIDs(); len(nodes) > 0 && !vuo.mutation.PlacesCleared() {
@@ -1917,6 +1942,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1933,6 +1959,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1949,6 +1976,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedVenueOrdersIDs(); len(nodes) > 0 && !vuo.mutation.VenueOrdersCleared() {
@@ -1962,6 +1990,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1978,6 +2007,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1994,6 +2024,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedVenueEntryIDs(); len(nodes) > 0 && !vuo.mutation.VenueEntryCleared() {
@@ -2007,6 +2038,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2023,6 +2055,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2039,6 +2072,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.UserVenues
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !vuo.mutation.UsersCleared() {
@@ -2052,6 +2086,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.UserVenues
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2068,6 +2103,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.UserVenues
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2084,6 +2120,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSms
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedSmsIDs(); len(nodes) > 0 && !vuo.mutation.SmsCleared() {
@@ -2097,6 +2134,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2113,6 +2151,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2129,6 +2168,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSmsLog
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedSmslogIDs(); len(nodes) > 0 && !vuo.mutation.SmslogCleared() {
@@ -2142,6 +2182,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2158,6 +2199,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2174,6 +2216,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueRoles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vuo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !vuo.mutation.RolesCleared() {
@@ -2187,6 +2230,7 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2203,11 +2247,14 @@ func (vuo *VenueUpdateOne) sqlSave(ctx context.Context) (_node *Venue, err error
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vuo.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = vuo.schemaConfig.Venue
+	ctx = internal.NewSchemaConfigContext(ctx, vuo.schemaConfig)
 	_node = &Venue{config: vuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

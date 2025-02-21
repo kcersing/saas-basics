@@ -91,21 +91,21 @@ func (t Token) Update(req *token.TokenInfo) error {
 	return nil
 }
 
-func (t Token) IsExistByUserID(userID int64) bool {
-	_, exist := t.cache.Get(fmt.Sprintf("token_%d", userID))
+func (t Token) IsExistByUserId(userId int64) bool {
+	_, exist := t.cache.Get(fmt.Sprintf("token_%d", userId))
 	if exist {
 		return true
 	}
-	exist, _ = t.db.Token.Query().Where(token2.UserID(userID)).Exist(t.ctx)
+	exist, _ = t.db.Token.Query().Where(token2.UserID(userId)).Exist(t.ctx)
 	return exist
 }
 
-func (t Token) Delete(userID int64) error {
-	_, err := t.db.Token.Delete().Where(token2.UserID(userID)).Exec(t.ctx)
+func (t Token) Delete(userId int64) error {
+	_, err := t.db.Token.Delete().Where(token2.UserID(userId)).Exec(t.ctx)
 	if err != nil {
 		return errors.Wrap(err, "delete Token failed")
 	}
-	t.cache.Del(fmt.Sprintf("token_%d", userID))
+	t.cache.Del(fmt.Sprintf("token_%d", userId))
 	return nil
 }
 

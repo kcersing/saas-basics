@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (eld *EntryLogsDelete) ExecX(ctx context.Context) int {
 
 func (eld *EntryLogsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(entrylogs.Table, sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64))
+	_spec.Node.Schema = eld.schemaConfig.EntryLogs
+	ctx = internal.NewSchemaConfigContext(ctx, eld.schemaConfig)
 	if ps := eld.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

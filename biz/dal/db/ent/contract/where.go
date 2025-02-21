@@ -3,6 +3,7 @@
 package contract
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -552,6 +553,9 @@ func HasProducts() predicate.Contract {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductContracts
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -560,6 +564,9 @@ func HasProducts() predicate.Contract {
 func HasProductsWith(preds ...predicate.Product) predicate.Contract {
 	return predicate.Contract(func(s *sql.Selector) {
 		step := newProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductContracts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

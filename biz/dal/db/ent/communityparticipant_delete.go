@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/communityparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (cpd *CommunityParticipantDelete) ExecX(ctx context.Context) int {
 
 func (cpd *CommunityParticipantDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(communityparticipant.Table, sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64))
+	_spec.Node.Schema = cpd.schemaConfig.CommunityParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpd.schemaConfig)
 	if ps := cpd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

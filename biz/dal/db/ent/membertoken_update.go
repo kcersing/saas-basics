@@ -6,6 +6,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -157,9 +159,34 @@ func (mtu *MemberTokenUpdate) SetNillableExpiredAt(t *time.Time) *MemberTokenUpd
 	return mtu
 }
 
+// SetOwnerID sets the "owner" edge to the Member entity by ID.
+func (mtu *MemberTokenUpdate) SetOwnerID(id int64) *MemberTokenUpdate {
+	mtu.mutation.SetOwnerID(id)
+	return mtu
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
+func (mtu *MemberTokenUpdate) SetNillableOwnerID(id *int64) *MemberTokenUpdate {
+	if id != nil {
+		mtu = mtu.SetOwnerID(*id)
+	}
+	return mtu
+}
+
+// SetOwner sets the "owner" edge to the Member entity.
+func (mtu *MemberTokenUpdate) SetOwner(m *Member) *MemberTokenUpdate {
+	return mtu.SetOwnerID(m.ID)
+}
+
 // Mutation returns the MemberTokenMutation object of the builder.
 func (mtu *MemberTokenUpdate) Mutation() *MemberTokenMutation {
 	return mtu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Member entity.
+func (mtu *MemberTokenUpdate) ClearOwner() *MemberTokenUpdate {
+	mtu.mutation.ClearOwner()
+	return mtu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -249,6 +276,39 @@ func (mtu *MemberTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mtu.mutation.ExpiredAt(); ok {
 		_spec.SetField(membertoken.FieldExpiredAt, field.TypeTime, value)
 	}
+	if mtu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   membertoken.OwnerTable,
+			Columns: []string{membertoken.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mtu.schemaConfig.MemberToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mtu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   membertoken.OwnerTable,
+			Columns: []string{membertoken.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mtu.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	_spec.Node.Schema = mtu.schemaConfig.MemberToken
+	ctx = internal.NewSchemaConfigContext(ctx, mtu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mtu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membertoken.Label}
@@ -398,9 +458,34 @@ func (mtuo *MemberTokenUpdateOne) SetNillableExpiredAt(t *time.Time) *MemberToke
 	return mtuo
 }
 
+// SetOwnerID sets the "owner" edge to the Member entity by ID.
+func (mtuo *MemberTokenUpdateOne) SetOwnerID(id int64) *MemberTokenUpdateOne {
+	mtuo.mutation.SetOwnerID(id)
+	return mtuo
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
+func (mtuo *MemberTokenUpdateOne) SetNillableOwnerID(id *int64) *MemberTokenUpdateOne {
+	if id != nil {
+		mtuo = mtuo.SetOwnerID(*id)
+	}
+	return mtuo
+}
+
+// SetOwner sets the "owner" edge to the Member entity.
+func (mtuo *MemberTokenUpdateOne) SetOwner(m *Member) *MemberTokenUpdateOne {
+	return mtuo.SetOwnerID(m.ID)
+}
+
 // Mutation returns the MemberTokenMutation object of the builder.
 func (mtuo *MemberTokenUpdateOne) Mutation() *MemberTokenMutation {
 	return mtuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Member entity.
+func (mtuo *MemberTokenUpdateOne) ClearOwner() *MemberTokenUpdateOne {
+	mtuo.mutation.ClearOwner()
+	return mtuo
 }
 
 // Where appends a list predicates to the MemberTokenUpdate builder.
@@ -520,6 +605,39 @@ func (mtuo *MemberTokenUpdateOne) sqlSave(ctx context.Context) (_node *MemberTok
 	if value, ok := mtuo.mutation.ExpiredAt(); ok {
 		_spec.SetField(membertoken.FieldExpiredAt, field.TypeTime, value)
 	}
+	if mtuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   membertoken.OwnerTable,
+			Columns: []string{membertoken.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mtuo.schemaConfig.MemberToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mtuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   membertoken.OwnerTable,
+			Columns: []string{membertoken.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mtuo.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	_spec.Node.Schema = mtuo.schemaConfig.MemberToken
+	ctx = internal.NewSchemaConfigContext(ctx, mtuo.schemaConfig)
 	_node = &MemberToken{config: mtuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

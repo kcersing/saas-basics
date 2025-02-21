@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/venuesms"
 
@@ -41,6 +42,8 @@ func (vsd *VenueSmsDelete) ExecX(ctx context.Context) int {
 
 func (vsd *VenueSmsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(venuesms.Table, sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64))
+	_spec.Node.Schema = vsd.schemaConfig.VenueSms
+	ctx = internal.NewSchemaConfigContext(ctx, vsd.schemaConfig)
 	if ps := vsd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

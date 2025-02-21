@@ -4,6 +4,7 @@ package ent
 
 import (
 	"fmt"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membertoken"
 	"strings"
 	"time"
@@ -32,8 +33,34 @@ type MemberToken struct {
 	// Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）
 	Source string `json:"source,omitempty"`
 	//  Expire time | 过期时间
-	ExpiredAt    time.Time `json:"expired_at,omitempty"`
+	ExpiredAt time.Time `json:"expired_at,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the MemberTokenQuery when eager-loading is set.
+	Edges        MemberTokenEdges `json:"edges"`
+	member_token *int64
 	selectValues sql.SelectValues
+}
+
+// MemberTokenEdges holds the relations/edges for other nodes in the graph.
+type MemberTokenEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Member `json:"owner,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e MemberTokenEdges) OwnerOrErr() (*Member, error) {
+	if e.loadedTypes[0] {
+		if e.Owner == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: member.Label}
+		}
+		return e.Owner, nil
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -47,6 +74,8 @@ func (*MemberToken) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case membertoken.FieldCreatedAt, membertoken.FieldUpdatedAt, membertoken.FieldExpiredAt:
 			values[i] = new(sql.NullTime)
+		case membertoken.ForeignKeys[0]: // member_token
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -116,6 +145,13 @@ func (mt *MemberToken) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mt.ExpiredAt = value.Time
 			}
+		case membertoken.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field member_token", value)
+			} else if value.Valid {
+				mt.member_token = new(int64)
+				*mt.member_token = int64(value.Int64)
+			}
 		default:
 			mt.selectValues.Set(columns[i], values[i])
 		}
@@ -127,6 +163,11 @@ func (mt *MemberToken) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (mt *MemberToken) Value(name string) (ent.Value, error) {
 	return mt.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the MemberToken entity.
+func (mt *MemberToken) QueryOwner() *MemberQuery {
+	return NewMemberTokenClient(mt.config).QueryOwner(mt)
 }
 
 // Update returns a builder for updating this MemberToken.

@@ -328,6 +328,7 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 		_node = &ContestParticipant{config: cpc.config}
 		_spec = sqlgraph.NewCreateSpec(contestparticipant.Table, sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = cpc.schemaConfig.ContestParticipant
 	if id, ok := cpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -391,6 +392,7 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 				IDSpec: sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpc.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -408,6 +410,7 @@ func (cpc *ContestParticipantCreate) createSpec() (*ContestParticipant, *sqlgrap
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpc.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

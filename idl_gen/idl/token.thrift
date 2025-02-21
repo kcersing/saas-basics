@@ -14,7 +14,7 @@ struct TokenInfo {
     8:  string expiredAt (api.raw = "expiredAt")
     10: string mobile (api.raw = "mobile")
 }
-struct UserTokenInfo {
+struct MemberTokenInfo {
     1:  i64 id (api.raw = "id")
     2:  string createdAt (api.raw = "createdAt")
     3:  string updatedAt (api.raw = "updatedAt")
@@ -31,10 +31,16 @@ struct TokenListReq {
     2:  optional i64 pageSize=100 (api.raw = "pageSize")
     3:  string username="" (api.raw = "username")
     4:  i64 userId=0 (api.raw = "userID")
-    5:  i64 type (api.raw = "type")
     6: string mobile (api.raw = "mobile")
 }
-
+// token列表请求参数
+struct MemberTokenListReq {
+    1:  optional i64 page=1 (api.raw = "page")
+    2:  optional i64 pageSize=100 (api.raw = "pageSize")
+    3:  string name="" (api.raw = "name")
+    4:  i64 memberId (api.raw = "memberId")
+    6: string mobile (api.raw = "mobile")
+}
 service TokenService{
   // 更新Token
   base.NilResponse UpdateToken(1: TokenInfo req) (api.post = "/service/token/update");
@@ -44,5 +50,9 @@ service TokenService{
 
   // 获取token列表
   base.NilResponse TokenList(1: TokenListReq req) (api.post = "/service/token/list");
+
+
+
+
 
 }

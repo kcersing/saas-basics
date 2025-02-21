@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -306,6 +307,7 @@ func (du *DictionaryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = du.schemaConfig.DictionaryDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := du.mutation.RemovedDictionaryDetailsIDs(); len(nodes) > 0 && !du.mutation.DictionaryDetailsCleared() {
@@ -319,6 +321,7 @@ func (du *DictionaryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = du.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -335,11 +338,14 @@ func (du *DictionaryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = du.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = du.schemaConfig.Dictionary
+	ctx = internal.NewSchemaConfigContext(ctx, du.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, du.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{dictionary.Label}
@@ -667,6 +673,7 @@ func (duo *DictionaryUpdateOne) sqlSave(ctx context.Context) (_node *Dictionary,
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = duo.schemaConfig.DictionaryDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := duo.mutation.RemovedDictionaryDetailsIDs(); len(nodes) > 0 && !duo.mutation.DictionaryDetailsCleared() {
@@ -680,6 +687,7 @@ func (duo *DictionaryUpdateOne) sqlSave(ctx context.Context) (_node *Dictionary,
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = duo.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -696,11 +704,14 @@ func (duo *DictionaryUpdateOne) sqlSave(ctx context.Context) (_node *Dictionary,
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = duo.schemaConfig.DictionaryDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = duo.schemaConfig.Dictionary
+	ctx = internal.NewSchemaConfigContext(ctx, duo.schemaConfig)
 	_node = &Dictionary{config: duo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

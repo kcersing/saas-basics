@@ -3,6 +3,7 @@
 package communityparticipant
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -857,6 +858,9 @@ func HasCommunity() predicate.CommunityParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, CommunityTable, CommunityColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Community
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -865,6 +869,9 @@ func HasCommunity() predicate.CommunityParticipant {
 func HasCommunityWith(preds ...predicate.Community) predicate.CommunityParticipant {
 	return predicate.CommunityParticipant(func(s *sql.Selector) {
 		step := newCommunityStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Community
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -880,6 +887,9 @@ func HasMembers() predicate.CommunityParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -888,6 +898,9 @@ func HasMembers() predicate.CommunityParticipant {
 func HasMembersWith(preds ...predicate.Member) predicate.CommunityParticipant {
 	return predicate.CommunityParticipant(func(s *sql.Selector) {
 		step := newMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

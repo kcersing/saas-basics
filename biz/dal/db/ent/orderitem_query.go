@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (oiq *OrderItemQuery) QueryOrder() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orderitem.OrderTable, orderitem.OrderColumn),
 		)
+		schemaConfig := oiq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderItem
 		fromU = sqlgraph.SetNeighbors(oiq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (oiq *OrderItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*O
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = oiq.schemaConfig.OrderItem
+	ctx = internal.NewSchemaConfigContext(ctx, oiq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (oiq *OrderItemQuery) loadOrder(ctx context.Context, query *OrderQuery, nod
 
 func (oiq *OrderItemQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := oiq.querySpec()
+	_spec.Node.Schema = oiq.schemaConfig.OrderItem
+	ctx = internal.NewSchemaConfigContext(ctx, oiq.schemaConfig)
 	_spec.Node.Columns = oiq.ctx.Fields
 	if len(oiq.ctx.Fields) > 0 {
 		_spec.Unique = oiq.ctx.Unique != nil && *oiq.ctx.Unique
@@ -497,6 +505,9 @@ func (oiq *OrderItemQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if oiq.ctx.Unique != nil && *oiq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(oiq.schemaConfig.OrderItem)
+	ctx = internal.NewSchemaConfigContext(ctx, oiq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range oiq.predicates {
 		p(selector)
 	}

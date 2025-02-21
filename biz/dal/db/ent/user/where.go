@@ -3,6 +3,7 @@
 package user
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1007,6 +1008,9 @@ func HasToken() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Token
+		step.Edge.Schema = schemaConfig.Token
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1015,6 +1019,9 @@ func HasToken() predicate.User {
 func HasTokenWith(preds ...predicate.Token) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newTokenStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Token
+		step.Edge.Schema = schemaConfig.Token
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1030,6 +1037,9 @@ func HasTags() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.UserTags
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1038,6 +1048,9 @@ func HasTags() predicate.User {
 func HasTagsWith(preds ...predicate.DictionaryDetail) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newTagsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.UserTags
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1053,6 +1066,9 @@ func HasCreatedOrders() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CreatedOrdersTable, CreatedOrdersColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1061,6 +1077,9 @@ func HasCreatedOrders() predicate.User {
 func HasCreatedOrdersWith(preds ...predicate.Order) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newCreatedOrdersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1076,6 +1095,9 @@ func HasUserEntry() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, UserEntryTable, UserEntryColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1084,6 +1106,9 @@ func HasUserEntry() predicate.User {
 func HasUserEntryWith(preds ...predicate.EntryLogs) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newUserEntryStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1099,6 +1124,9 @@ func HasVenues() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, VenuesTable, VenuesPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.UserVenues
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1107,6 +1135,9 @@ func HasVenues() predicate.User {
 func HasVenuesWith(preds ...predicate.Venue) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newVenuesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.UserVenues
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1122,6 +1153,9 @@ func HasRoles() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, RolesTable, RolesPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.UserRoles
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1130,6 +1164,9 @@ func HasRoles() predicate.User {
 func HasRolesWith(preds ...predicate.Role) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newRolesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.UserRoles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1145,6 +1182,9 @@ func HasUserTimePeriod() predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, UserTimePeriodTable, UserTimePeriodColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.UserTimePeriod
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1153,6 +1193,9 @@ func HasUserTimePeriod() predicate.User {
 func HasUserTimePeriodWith(preds ...predicate.UserTimePeriod) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newUserTimePeriodStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.UserTimePeriod
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

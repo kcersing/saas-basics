@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulemember"
@@ -727,6 +728,7 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = smu.schemaConfig.ScheduleMember
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := smu.mutation.ScheduleIDs(); len(nodes) > 0 {
@@ -740,11 +742,14 @@ func (smu *ScheduleMemberUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = smu.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = smu.schemaConfig.ScheduleMember
+	ctx = internal.NewSchemaConfigContext(ctx, smu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, smu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{schedulemember.Label}
@@ -1492,6 +1497,7 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = smuo.schemaConfig.ScheduleMember
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := smuo.mutation.ScheduleIDs(); len(nodes) > 0 {
@@ -1505,11 +1511,14 @@ func (smuo *ScheduleMemberUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = smuo.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = smuo.schemaConfig.ScheduleMember
+	ctx = internal.NewSchemaConfigContext(ctx, smuo.schemaConfig)
 	_node = &ScheduleMember{config: smuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

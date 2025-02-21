@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/venue"
@@ -78,6 +79,9 @@ func (vpq *VenuePlaceQuery) QueryVenue() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, venueplace.VenueTable, venueplace.VenueColumn),
 		)
+		schemaConfig := vpq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenuePlace
 		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -100,6 +104,9 @@ func (vpq *VenuePlaceQuery) QueryProducts() *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, venueplace.ProductsTable, venueplace.ProductsPrimaryKey...),
 		)
+		schemaConfig := vpq.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,6 +427,8 @@ func (vpq *VenuePlaceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = vpq.schemaConfig.VenuePlace
+	ctx = internal.NewSchemaConfigContext(ctx, vpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -487,6 +496,7 @@ func (vpq *VenuePlaceQuery) loadProducts(ctx context.Context, query *ProductQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(venueplace.ProductsTable)
+		joinT.Schema(vpq.schemaConfig.VenuePlaceProducts)
 		s.Join(joinT).On(s.C(product.FieldID), joinT.C(venueplace.ProductsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(venueplace.ProductsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -538,6 +548,8 @@ func (vpq *VenuePlaceQuery) loadProducts(ctx context.Context, query *ProductQuer
 
 func (vpq *VenuePlaceQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := vpq.querySpec()
+	_spec.Node.Schema = vpq.schemaConfig.VenuePlace
+	ctx = internal.NewSchemaConfigContext(ctx, vpq.schemaConfig)
 	_spec.Node.Columns = vpq.ctx.Fields
 	if len(vpq.ctx.Fields) > 0 {
 		_spec.Unique = vpq.ctx.Unique != nil && *vpq.ctx.Unique
@@ -603,6 +615,9 @@ func (vpq *VenuePlaceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if vpq.ctx.Unique != nil && *vpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(vpq.schemaConfig.VenuePlace)
+	ctx = internal.NewSchemaConfigContext(ctx, vpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range vpq.predicates {
 		p(selector)
 	}

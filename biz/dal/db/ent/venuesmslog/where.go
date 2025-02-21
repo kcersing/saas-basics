@@ -3,6 +3,7 @@
 package venuesmslog
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -777,6 +778,9 @@ func HasVenue() predicate.VenueSmsLog {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, VenueTable, VenueColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -785,6 +789,9 @@ func HasVenue() predicate.VenueSmsLog {
 func HasVenueWith(preds ...predicate.Venue) predicate.VenueSmsLog {
 	return predicate.VenueSmsLog(func(s *sql.Selector) {
 		step := newVenueStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

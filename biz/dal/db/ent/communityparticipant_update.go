@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/community"
 	"saas/biz/dal/db/ent/communityparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -499,6 +500,7 @@ func (cpu *CommunityParticipantUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpu.schemaConfig.CommunityParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cpu.mutation.CommunityIDs(); len(nodes) > 0 {
@@ -512,6 +514,7 @@ func (cpu *CommunityParticipantUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpu.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -528,6 +531,7 @@ func (cpu *CommunityParticipantUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpu.schemaConfig.MemberMemberCommunitys
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cpu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !cpu.mutation.MembersCleared() {
@@ -541,6 +545,7 @@ func (cpu *CommunityParticipantUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpu.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -557,11 +562,14 @@ func (cpu *CommunityParticipantUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpu.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cpu.schemaConfig.CommunityParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, cpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{communityparticipant.Label}
@@ -1081,6 +1089,7 @@ func (cpuo *CommunityParticipantUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpuo.schemaConfig.CommunityParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cpuo.mutation.CommunityIDs(); len(nodes) > 0 {
@@ -1094,6 +1103,7 @@ func (cpuo *CommunityParticipantUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpuo.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1110,6 +1120,7 @@ func (cpuo *CommunityParticipantUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpuo.schemaConfig.MemberMemberCommunitys
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cpuo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !cpuo.mutation.MembersCleared() {
@@ -1123,6 +1134,7 @@ func (cpuo *CommunityParticipantUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpuo.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1139,11 +1151,14 @@ func (cpuo *CommunityParticipantUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpuo.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cpuo.schemaConfig.CommunityParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpuo.schemaConfig)
 	_node = &CommunityParticipant{config: cpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

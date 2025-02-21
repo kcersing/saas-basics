@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
@@ -81,6 +82,9 @@ func (elq *EntryLogsQuery) QueryVenues() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.VenuesTable, entrylogs.VenuesColumn),
 		)
+		schemaConfig := elq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -103,6 +107,9 @@ func (elq *EntryLogsQuery) QueryMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MembersTable, entrylogs.MembersColumn),
 		)
+		schemaConfig := elq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -125,6 +132,9 @@ func (elq *EntryLogsQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.UsersTable, entrylogs.UsersColumn),
 		)
+		schemaConfig := elq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -147,6 +157,9 @@ func (elq *EntryLogsQuery) QueryMemberProducts() *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entrylogs.MemberProductsTable, entrylogs.MemberProductsColumn),
 		)
+		schemaConfig := elq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(elq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -493,6 +506,8 @@ func (elq *EntryLogsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = elq.schemaConfig.EntryLogs
+	ctx = internal.NewSchemaConfigContext(ctx, elq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -648,6 +663,8 @@ func (elq *EntryLogsQuery) loadMemberProducts(ctx context.Context, query *Member
 
 func (elq *EntryLogsQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := elq.querySpec()
+	_spec.Node.Schema = elq.schemaConfig.EntryLogs
+	ctx = internal.NewSchemaConfigContext(ctx, elq.schemaConfig)
 	_spec.Node.Columns = elq.ctx.Fields
 	if len(elq.ctx.Fields) > 0 {
 		_spec.Unique = elq.ctx.Unique != nil && *elq.ctx.Unique
@@ -722,6 +739,9 @@ func (elq *EntryLogsQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if elq.ctx.Unique != nil && *elq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(elq.schemaConfig.EntryLogs)
+	ctx = internal.NewSchemaConfigContext(ctx, elq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range elq.predicates {
 		p(selector)
 	}

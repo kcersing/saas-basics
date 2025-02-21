@@ -470,6 +470,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		_node = &Order{config: oc.config}
 		_spec = sqlgraph.NewCreateSpec(order.Table, sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = oc.schemaConfig.Order
 	if id, ok := oc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -533,6 +534,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -549,6 +551,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -565,6 +568,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -581,6 +585,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -597,6 +602,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -613,6 +619,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -630,6 +637,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -647,6 +655,7 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oc.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

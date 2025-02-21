@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/banner"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -342,6 +343,8 @@ func (bq *BannerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Banne
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = bq.schemaConfig.Banner
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -356,6 +359,8 @@ func (bq *BannerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Banne
 
 func (bq *BannerQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := bq.querySpec()
+	_spec.Node.Schema = bq.schemaConfig.Banner
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
 	_spec.Node.Columns = bq.ctx.Fields
 	if len(bq.ctx.Fields) > 0 {
 		_spec.Unique = bq.ctx.Unique != nil && *bq.ctx.Unique
@@ -418,6 +423,9 @@ func (bq *BannerQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if bq.ctx.Unique != nil && *bq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(bq.schemaConfig.Banner)
+	ctx = internal.NewSchemaConfigContext(ctx, bq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range bq.predicates {
 		p(selector)
 	}

@@ -533,6 +533,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 		_node = &MemberProduct{config: mpc.config}
 		_spec = sqlgraph.NewCreateSpec(memberproduct.Table, sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mpc.schemaConfig.MemberProduct
 	if id, ok := mpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -636,6 +637,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -653,6 +655,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -669,6 +672,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -685,6 +689,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -701,6 +706,7 @@ func (mpc *MemberProductCreate) createSpec() (*MemberProduct, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(memberproductcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpc.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

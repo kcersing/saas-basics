@@ -3,6 +3,7 @@
 package community
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1397,6 +1398,9 @@ func HasCommunityParticipants() predicate.Community {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CommunityParticipantsTable, CommunityParticipantsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1405,6 +1409,9 @@ func HasCommunityParticipants() predicate.Community {
 func HasCommunityParticipantsWith(preds ...predicate.CommunityParticipant) predicate.Community {
 	return predicate.Community(func(s *sql.Selector) {
 		step := newCommunityParticipantsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

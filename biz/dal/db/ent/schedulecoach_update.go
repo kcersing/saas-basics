@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -602,6 +603,7 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = scu.schemaConfig.ScheduleCoach
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := scu.mutation.ScheduleIDs(); len(nodes) > 0 {
@@ -615,11 +617,14 @@ func (scu *ScheduleCoachUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = scu.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = scu.schemaConfig.ScheduleCoach
+	ctx = internal.NewSchemaConfigContext(ctx, scu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, scu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{schedulecoach.Label}
@@ -1243,6 +1248,7 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = scuo.schemaConfig.ScheduleCoach
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := scuo.mutation.ScheduleIDs(); len(nodes) > 0 {
@@ -1256,11 +1262,14 @@ func (scuo *ScheduleCoachUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = scuo.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = scuo.schemaConfig.ScheduleCoach
+	ctx = internal.NewSchemaConfigContext(ctx, scuo.schemaConfig)
 	_node = &ScheduleCoach{config: scuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

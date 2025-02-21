@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 
@@ -41,6 +42,8 @@ func (pd *ProductDelete) ExecX(ctx context.Context) int {
 
 func (pd *ProductDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64))
+	_spec.Node.Schema = pd.schemaConfig.Product
+	ctx = internal.NewSchemaConfigContext(ctx, pd.schemaConfig)
 	if ps := pd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/order"
@@ -90,6 +91,9 @@ func (oq *OrderQuery) QueryAmount() *OrderAmountQuery {
 			sqlgraph.To(orderamount.Table, orderamount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.AmountTable, order.AmountColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrderAmount
+		step.Edge.Schema = schemaConfig.OrderAmount
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -112,6 +116,9 @@ func (oq *OrderQuery) QueryItem() *OrderItemQuery {
 			sqlgraph.To(orderitem.Table, orderitem.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.ItemTable, order.ItemColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrderItem
+		step.Edge.Schema = schemaConfig.OrderItem
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -134,6 +141,9 @@ func (oq *OrderQuery) QueryPay() *OrderPayQuery {
 			sqlgraph.To(orderpay.Table, orderpay.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.PayTable, order.PayColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrderPay
+		step.Edge.Schema = schemaConfig.OrderPay
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -156,6 +166,9 @@ func (oq *OrderQuery) QueryOrderContents() *MemberContractQuery {
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.OrderContentsTable, order.OrderContentsColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -178,6 +191,9 @@ func (oq *OrderQuery) QuerySales() *OrderSalesQuery {
 			sqlgraph.To(ordersales.Table, ordersales.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, order.SalesTable, order.SalesColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrderSales
+		step.Edge.Schema = schemaConfig.OrderSales
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -200,6 +216,9 @@ func (oq *OrderQuery) QueryOrderVenues() *VenueQuery {
 			sqlgraph.To(venue.Table, venue.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderVenuesTable, order.OrderVenuesColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -222,6 +241,9 @@ func (oq *OrderQuery) QueryOrderMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderMembersTable, order.OrderMembersColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -244,6 +266,9 @@ func (oq *OrderQuery) QueryOrderCreates() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.OrderCreatesTable, order.OrderCreatesColumn),
 		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -642,6 +667,8 @@ func (oq *OrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Order,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = oq.schemaConfig.Order
+	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -947,6 +974,8 @@ func (oq *OrderQuery) loadOrderCreates(ctx context.Context, query *UserQuery, no
 
 func (oq *OrderQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := oq.querySpec()
+	_spec.Node.Schema = oq.schemaConfig.Order
+	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
 	_spec.Node.Columns = oq.ctx.Fields
 	if len(oq.ctx.Fields) > 0 {
 		_spec.Unique = oq.ctx.Unique != nil && *oq.ctx.Unique
@@ -1018,6 +1047,9 @@ func (oq *OrderQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if oq.ctx.Unique != nil && *oq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(oq.schemaConfig.Order)
+	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range oq.predicates {
 		p(selector)
 	}

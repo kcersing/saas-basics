@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -76,6 +77,9 @@ func (cq *ContestQuery) QueryContestParticipants() *ContestParticipantQuery {
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contest.ContestParticipantsTable, contest.ContestParticipantsColumn),
 		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (cq *ContestQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = cq.schemaConfig.Contest
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -437,6 +443,8 @@ func (cq *ContestQuery) loadContestParticipants(ctx context.Context, query *Cont
 
 func (cq *ContestQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
+	_spec.Node.Schema = cq.schemaConfig.Contest
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	_spec.Node.Columns = cq.ctx.Fields
 	if len(cq.ctx.Fields) > 0 {
 		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
@@ -499,6 +507,9 @@ func (cq *ContestQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if cq.ctx.Unique != nil && *cq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(cq.schemaConfig.Contest)
+	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range cq.predicates {
 		p(selector)
 	}

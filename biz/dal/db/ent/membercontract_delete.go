@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (mcd *MemberContractDelete) ExecX(ctx context.Context) int {
 
 func (mcd *MemberContractDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(membercontract.Table, sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64))
+	_spec.Node.Schema = mcd.schemaConfig.MemberContract
+	ctx = internal.NewSchemaConfigContext(ctx, mcd.schemaConfig)
 	if ps := mcd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

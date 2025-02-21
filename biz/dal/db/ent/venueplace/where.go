@@ -3,6 +3,7 @@
 package venueplace
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -952,6 +953,9 @@ func HasVenue() predicate.VenuePlace {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, VenueTable, VenueColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenuePlace
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -960,6 +964,9 @@ func HasVenue() predicate.VenuePlace {
 func HasVenueWith(preds ...predicate.Venue) predicate.VenuePlace {
 	return predicate.VenuePlace(func(s *sql.Selector) {
 		step := newVenueStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.VenuePlace
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -975,6 +982,9 @@ func HasProducts() predicate.VenuePlace {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ProductsTable, ProductsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -983,6 +993,9 @@ func HasProducts() predicate.VenuePlace {
 func HasProductsWith(preds ...predicate.Product) predicate.VenuePlace {
 	return predicate.VenuePlace(func(s *sql.Selector) {
 		step := newProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -201,6 +201,7 @@ func (mc *MessagesCreate) createSpec() (*Messages, *sqlgraph.CreateSpec) {
 		_node = &Messages{config: mc.config}
 		_spec = sqlgraph.NewCreateSpec(messages.Table, sqlgraph.NewFieldSpec(messages.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mc.schemaConfig.Messages
 	if id, ok := mc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

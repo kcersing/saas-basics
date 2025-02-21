@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/banner"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -294,6 +295,8 @@ func (bu *BannerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if bu.mutation.IsShowCleared() {
 		_spec.ClearField(banner.FieldIsShow, field.TypeInt64)
 	}
+	_spec.Node.Schema = bu.schemaConfig.Banner
+	ctx = internal.NewSchemaConfigContext(ctx, bu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{banner.Label}
@@ -610,6 +613,8 @@ func (buo *BannerUpdateOne) sqlSave(ctx context.Context) (_node *Banner, err err
 	if buo.mutation.IsShowCleared() {
 		_spec.ClearField(banner.FieldIsShow, field.TypeInt64)
 	}
+	_spec.Node.Schema = buo.schemaConfig.Banner
+	ctx = internal.NewSchemaConfigContext(ctx, buo.schemaConfig)
 	_node = &Banner{config: buo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

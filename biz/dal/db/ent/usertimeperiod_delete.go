@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/usertimeperiod"
 
@@ -41,6 +42,8 @@ func (utpd *UserTimePeriodDelete) ExecX(ctx context.Context) int {
 
 func (utpd *UserTimePeriodDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(usertimeperiod.Table, sqlgraph.NewFieldSpec(usertimeperiod.FieldID, field.TypeInt64))
+	_spec.Node.Schema = utpd.schemaConfig.UserTimePeriod
+	ctx = internal.NewSchemaConfigContext(ctx, utpd.schemaConfig)
 	if ps := utpd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

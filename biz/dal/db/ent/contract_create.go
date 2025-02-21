@@ -240,6 +240,7 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 		_node = &Contract{config: cc.config}
 		_spec = sqlgraph.NewCreateSpec(contract.Table, sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = cc.schemaConfig.Contract
 	if id, ok := cc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -287,6 +288,7 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cc.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

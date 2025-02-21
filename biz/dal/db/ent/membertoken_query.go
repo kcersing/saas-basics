@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -21,6 +23,8 @@ type MemberTokenQuery struct {
 	order      []membertoken.OrderOption
 	inters     []Interceptor
 	predicates []predicate.MemberToken
+	withOwner  *MemberQuery
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +59,31 @@ func (mtq *MemberTokenQuery) Unique(unique bool) *MemberTokenQuery {
 func (mtq *MemberTokenQuery) Order(o ...membertoken.OrderOption) *MemberTokenQuery {
 	mtq.order = append(mtq.order, o...)
 	return mtq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (mtq *MemberTokenQuery) QueryOwner() *MemberQuery {
+	query := (&MemberClient{config: mtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(membertoken.Table, membertoken.FieldID, selector),
+			sqlgraph.To(member.Table, member.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, membertoken.OwnerTable, membertoken.OwnerColumn),
+		)
+		schemaConfig := mtq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberToken
+		fromU = sqlgraph.SetNeighbors(mtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first MemberToken entity from the query.
@@ -249,10 +278,22 @@ func (mtq *MemberTokenQuery) Clone() *MemberTokenQuery {
 		order:      append([]membertoken.OrderOption{}, mtq.order...),
 		inters:     append([]Interceptor{}, mtq.inters...),
 		predicates: append([]predicate.MemberToken{}, mtq.predicates...),
+		withOwner:  mtq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:  mtq.sql.Clone(),
 		path: mtq.path,
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (mtq *MemberTokenQuery) WithOwner(opts ...func(*MemberQuery)) *MemberTokenQuery {
+	query := (&MemberClient{config: mtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mtq.withOwner = query
+	return mtq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,17 +372,30 @@ func (mtq *MemberTokenQuery) prepareQuery(ctx context.Context) error {
 
 func (mtq *MemberTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MemberToken, error) {
 	var (
-		nodes = []*MemberToken{}
-		_spec = mtq.querySpec()
+		nodes       = []*MemberToken{}
+		withFKs     = mtq.withFKs
+		_spec       = mtq.querySpec()
+		loadedTypes = [1]bool{
+			mtq.withOwner != nil,
+		}
 	)
+	if mtq.withOwner != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, membertoken.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MemberToken).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &MemberToken{config: mtq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mtq.schemaConfig.MemberToken
+	ctx = internal.NewSchemaConfigContext(ctx, mtq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -351,11 +405,52 @@ func (mtq *MemberTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := mtq.withOwner; query != nil {
+		if err := mtq.loadOwner(ctx, query, nodes, nil,
+			func(n *MemberToken, e *Member) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (mtq *MemberTokenQuery) loadOwner(ctx context.Context, query *MemberQuery, nodes []*MemberToken, init func(*MemberToken), assign func(*MemberToken, *Member)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*MemberToken)
+	for i := range nodes {
+		if nodes[i].member_token == nil {
+			continue
+		}
+		fk := *nodes[i].member_token
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(member.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "member_token" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (mtq *MemberTokenQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mtq.querySpec()
+	_spec.Node.Schema = mtq.schemaConfig.MemberToken
+	ctx = internal.NewSchemaConfigContext(ctx, mtq.schemaConfig)
 	_spec.Node.Columns = mtq.ctx.Fields
 	if len(mtq.ctx.Fields) > 0 {
 		_spec.Unique = mtq.ctx.Unique != nil && *mtq.ctx.Unique
@@ -418,6 +513,9 @@ func (mtq *MemberTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mtq.ctx.Unique != nil && *mtq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mtq.schemaConfig.MemberToken)
+	ctx = internal.NewSchemaConfigContext(ctx, mtq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mtq.predicates {
 		p(selector)
 	}

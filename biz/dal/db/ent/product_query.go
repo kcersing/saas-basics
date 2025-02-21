@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/productcourses"
@@ -83,6 +84,9 @@ func (pq *ProductQuery) QueryTags() *DictionaryDetailQuery {
 			sqlgraph.To(dictionarydetail.Table, dictionarydetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, product.TagsTable, product.TagsPrimaryKey...),
 		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.DictionaryDetail
+		step.Edge.Schema = schemaConfig.ProductTags
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -105,6 +109,9 @@ func (pq *ProductQuery) QueryContracts() *ContractQuery {
 			sqlgraph.To(contract.Table, contract.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, product.ContractsTable, product.ContractsPrimaryKey...),
 		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Contract
+		step.Edge.Schema = schemaConfig.ProductContracts
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -127,6 +134,9 @@ func (pq *ProductQuery) QueryCourses() *ProductCoursesQuery {
 			sqlgraph.To(productcourses.Table, productcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, product.CoursesTable, product.CoursesColumn),
 		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -149,6 +159,9 @@ func (pq *ProductQuery) QueryLessons() *ProductCoursesQuery {
 			sqlgraph.To(productcourses.Table, productcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, product.LessonsTable, product.LessonsColumn),
 		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.ProductCourses
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -171,6 +184,9 @@ func (pq *ProductQuery) QueryProducts() *VenuePlaceQuery {
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, product.ProductsTable, product.ProductsPrimaryKey...),
 		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlaceProducts
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,6 +546,8 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = pq.schemaConfig.Product
+	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -590,6 +608,7 @@ func (pq *ProductQuery) loadTags(ctx context.Context, query *DictionaryDetailQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(product.TagsTable)
+		joinT.Schema(pq.schemaConfig.ProductTags)
 		s.Join(joinT).On(s.C(dictionarydetail.FieldID), joinT.C(product.TagsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(product.TagsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -651,6 +670,7 @@ func (pq *ProductQuery) loadContracts(ctx context.Context, query *ContractQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(product.ContractsTable)
+		joinT.Schema(pq.schemaConfig.ProductContracts)
 		s.Join(joinT).On(s.C(contract.FieldID), joinT.C(product.ContractsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(product.ContractsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -772,6 +792,7 @@ func (pq *ProductQuery) loadProducts(ctx context.Context, query *VenuePlaceQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(product.ProductsTable)
+		joinT.Schema(pq.schemaConfig.VenuePlaceProducts)
 		s.Join(joinT).On(s.C(venueplace.FieldID), joinT.C(product.ProductsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(product.ProductsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -823,6 +844,8 @@ func (pq *ProductQuery) loadProducts(ctx context.Context, query *VenuePlaceQuery
 
 func (pq *ProductQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pq.querySpec()
+	_spec.Node.Schema = pq.schemaConfig.Product
+	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
 	_spec.Node.Columns = pq.ctx.Fields
 	if len(pq.ctx.Fields) > 0 {
 		_spec.Unique = pq.ctx.Unique != nil && *pq.ctx.Unique
@@ -885,6 +908,9 @@ func (pq *ProductQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if pq.ctx.Unique != nil && *pq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(pq.schemaConfig.Product)
+	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range pq.predicates {
 		p(selector)
 	}

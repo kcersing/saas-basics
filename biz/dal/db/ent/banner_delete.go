@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/banner"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (bd *BannerDelete) ExecX(ctx context.Context) int {
 
 func (bd *BannerDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(banner.Table, sqlgraph.NewFieldSpec(banner.FieldID, field.TypeInt64))
+	_spec.Node.Schema = bd.schemaConfig.Banner
+	ctx = internal.NewSchemaConfigContext(ctx, bd.schemaConfig)
 	if ps := bd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

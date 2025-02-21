@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/role"
@@ -88,6 +89,9 @@ func (vq *VenueQuery) QueryPlaces() *VenuePlaceQuery {
 			sqlgraph.To(venueplace.Table, venueplace.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.PlacesTable, venue.PlacesColumn),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.VenuePlace
+		step.Edge.Schema = schemaConfig.VenuePlace
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -110,6 +114,9 @@ func (vq *VenueQuery) QueryVenueOrders() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueOrdersTable, venue.VenueOrdersColumn),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -132,6 +139,9 @@ func (vq *VenueQuery) QueryVenueEntry() *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.VenueEntryTable, venue.VenueEntryColumn),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -154,6 +164,9 @@ func (vq *VenueQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, venue.UsersTable, venue.UsersPrimaryKey...),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserVenues
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -176,6 +189,9 @@ func (vq *VenueQuery) QuerySms() *VenueSmsQuery {
 			sqlgraph.To(venuesms.Table, venuesms.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmsTable, venue.SmsColumn),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.VenueSms
+		step.Edge.Schema = schemaConfig.VenueSms
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,6 +214,9 @@ func (vq *VenueQuery) QuerySmslog() *VenueSmsLogQuery {
 			sqlgraph.To(venuesmslog.Table, venuesmslog.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, venue.SmslogTable, venue.SmslogColumn),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.VenueSmsLog
+		step.Edge.Schema = schemaConfig.VenueSmsLog
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -220,6 +239,9 @@ func (vq *VenueQuery) QueryRoles() *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, venue.RolesTable, venue.RolesPrimaryKey...),
 		)
+		schemaConfig := vq.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.VenueRoles
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -605,6 +627,8 @@ func (vq *VenueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Venue,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = vq.schemaConfig.Venue
+	ctx = internal.NewSchemaConfigContext(ctx, vq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -769,6 +793,7 @@ func (vq *VenueQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(venue.UsersTable)
+		joinT.Schema(vq.schemaConfig.UserVenues)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(venue.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(venue.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -890,6 +915,7 @@ func (vq *VenueQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(venue.RolesTable)
+		joinT.Schema(vq.schemaConfig.VenueRoles)
 		s.Join(joinT).On(s.C(role.FieldID), joinT.C(venue.RolesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(venue.RolesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -941,6 +967,8 @@ func (vq *VenueQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*
 
 func (vq *VenueQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := vq.querySpec()
+	_spec.Node.Schema = vq.schemaConfig.Venue
+	ctx = internal.NewSchemaConfigContext(ctx, vq.schemaConfig)
 	_spec.Node.Columns = vq.ctx.Fields
 	if len(vq.ctx.Fields) > 0 {
 		_spec.Unique = vq.ctx.Unique != nil && *vq.ctx.Unique
@@ -1003,6 +1031,9 @@ func (vq *VenueQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if vq.ctx.Unique != nil && *vq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(vq.schemaConfig.Venue)
+	ctx = internal.NewSchemaConfigContext(ctx, vq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range vq.predicates {
 		p(selector)
 	}

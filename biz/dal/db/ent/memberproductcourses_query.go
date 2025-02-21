@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/predicate"
@@ -76,6 +77,9 @@ func (mpcq *MemberProductCoursesQuery) QueryNodeC() *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeCTable, memberproductcourses.NodeCColumn),
 		)
+		schemaConfig := mpcq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromU = sqlgraph.SetNeighbors(mpcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -98,6 +102,9 @@ func (mpcq *MemberProductCoursesQuery) QueryNodeL() *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproductcourses.NodeLTable, memberproductcourses.NodeLColumn),
 		)
+		schemaConfig := mpcq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromU = sqlgraph.SetNeighbors(mpcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -418,6 +425,8 @@ func (mpcq *MemberProductCoursesQuery) sqlAll(ctx context.Context, hooks ...quer
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mpcq.schemaConfig.MemberProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, mpcq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -503,6 +512,8 @@ func (mpcq *MemberProductCoursesQuery) loadNodeL(ctx context.Context, query *Mem
 
 func (mpcq *MemberProductCoursesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mpcq.querySpec()
+	_spec.Node.Schema = mpcq.schemaConfig.MemberProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, mpcq.schemaConfig)
 	_spec.Node.Columns = mpcq.ctx.Fields
 	if len(mpcq.ctx.Fields) > 0 {
 		_spec.Unique = mpcq.ctx.Unique != nil && *mpcq.ctx.Unique
@@ -571,6 +582,9 @@ func (mpcq *MemberProductCoursesQuery) sqlQuery(ctx context.Context) *sql.Select
 	if mpcq.ctx.Unique != nil && *mpcq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mpcq.schemaConfig.MemberProductCourses)
+	ctx = internal.NewSchemaConfigContext(ctx, mpcq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mpcq.predicates {
 		p(selector)
 	}

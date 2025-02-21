@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/predicate"
@@ -418,6 +419,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := elu.mutation.VenuesIDs(); len(nodes) > 0 {
@@ -431,6 +433,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -447,6 +450,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := elu.mutation.MembersIDs(); len(nodes) > 0 {
@@ -460,6 +464,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -476,6 +481,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := elu.mutation.UsersIDs(); len(nodes) > 0 {
@@ -489,6 +495,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -505,6 +512,7 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := elu.mutation.MemberProductsIDs(); len(nodes) > 0 {
@@ -518,11 +526,14 @@ func (elu *EntryLogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = elu.schemaConfig.EntryLogs
+	ctx = internal.NewSchemaConfigContext(ctx, elu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, elu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entrylogs.Label}
@@ -959,6 +970,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eluo.mutation.VenuesIDs(); len(nodes) > 0 {
@@ -972,6 +984,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -988,6 +1001,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eluo.mutation.MembersIDs(); len(nodes) > 0 {
@@ -1001,6 +1015,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1017,6 +1032,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eluo.mutation.UsersIDs(); len(nodes) > 0 {
@@ -1030,6 +1046,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1046,6 +1063,7 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := eluo.mutation.MemberProductsIDs(); len(nodes) > 0 {
@@ -1059,11 +1077,14 @@ func (eluo *EntryLogsUpdateOne) sqlSave(ctx context.Context) (_node *EntryLogs, 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = eluo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = eluo.schemaConfig.EntryLogs
+	ctx = internal.NewSchemaConfigContext(ctx, eluo.schemaConfig)
 	_node = &EntryLogs{config: eluo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

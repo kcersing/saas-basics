@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberproduct"
@@ -83,6 +84,9 @@ func (mpq *MemberProductQuery) QueryMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, memberproduct.MembersTable, memberproduct.MembersColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberProduct
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -105,6 +109,9 @@ func (mpq *MemberProductQuery) QueryMemberProductEntry() *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductEntryTable, memberproduct.MemberProductEntryColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -127,6 +134,9 @@ func (mpq *MemberProductQuery) QueryMemberProductContents() *MemberContractQuery
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberProductContentsTable, memberproduct.MemberProductContentsColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -149,6 +159,9 @@ func (mpq *MemberProductQuery) QueryMemberCourses() *MemberProductCoursesQuery {
 			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberCoursesTable, memberproduct.MemberCoursesColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProductCourses
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -171,6 +184,9 @@ func (mpq *MemberProductQuery) QueryMemberLessons() *MemberProductCoursesQuery {
 			sqlgraph.To(memberproductcourses.Table, memberproductcourses.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, memberproduct.MemberLessonsTable, memberproduct.MemberLessonsColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProductCourses
+		step.Edge.Schema = schemaConfig.MemberProductCourses
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,6 +546,8 @@ func (mpq *MemberProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mpq.schemaConfig.MemberProduct
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -736,6 +754,8 @@ func (mpq *MemberProductQuery) loadMemberLessons(ctx context.Context, query *Mem
 
 func (mpq *MemberProductQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mpq.querySpec()
+	_spec.Node.Schema = mpq.schemaConfig.MemberProduct
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	_spec.Node.Columns = mpq.ctx.Fields
 	if len(mpq.ctx.Fields) > 0 {
 		_spec.Unique = mpq.ctx.Unique != nil && *mpq.ctx.Unique
@@ -801,6 +821,9 @@ func (mpq *MemberProductQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mpq.ctx.Unique != nil && *mpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mpq.schemaConfig.MemberProduct)
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mpq.predicates {
 		p(selector)
 	}

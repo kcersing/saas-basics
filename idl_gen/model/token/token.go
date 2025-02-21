@@ -518,7 +518,7 @@ func (p *TokenInfo) String() string {
 
 }
 
-type UserTokenInfo struct {
+type MemberTokenInfo struct {
 	ID        int64  `thrift:"id,1" form:"id" json:"id" query:"id"`
 	CreatedAt string `thrift:"createdAt,2" form:"createdAt" json:"createdAt" query:"createdAt"`
 	UpdatedAt string `thrift:"updatedAt,3" form:"updatedAt" json:"updatedAt" query:"updatedAt"`
@@ -530,50 +530,50 @@ type UserTokenInfo struct {
 	Mobile    string `thrift:"mobile,10" form:"mobile" json:"mobile" query:"mobile"`
 }
 
-func NewUserTokenInfo() *UserTokenInfo {
-	return &UserTokenInfo{}
+func NewMemberTokenInfo() *MemberTokenInfo {
+	return &MemberTokenInfo{}
 }
 
-func (p *UserTokenInfo) InitDefault() {
+func (p *MemberTokenInfo) InitDefault() {
 }
 
-func (p *UserTokenInfo) GetID() (v int64) {
+func (p *MemberTokenInfo) GetID() (v int64) {
 	return p.ID
 }
 
-func (p *UserTokenInfo) GetCreatedAt() (v string) {
+func (p *MemberTokenInfo) GetCreatedAt() (v string) {
 	return p.CreatedAt
 }
 
-func (p *UserTokenInfo) GetUpdatedAt() (v string) {
+func (p *MemberTokenInfo) GetUpdatedAt() (v string) {
 	return p.UpdatedAt
 }
 
-func (p *UserTokenInfo) GetMemberId() (v int64) {
+func (p *MemberTokenInfo) GetMemberId() (v int64) {
 	return p.MemberId
 }
 
-func (p *UserTokenInfo) GetName() (v string) {
+func (p *MemberTokenInfo) GetName() (v string) {
 	return p.Name
 }
 
-func (p *UserTokenInfo) GetToken() (v string) {
+func (p *MemberTokenInfo) GetToken() (v string) {
 	return p.Token
 }
 
-func (p *UserTokenInfo) GetSource() (v string) {
+func (p *MemberTokenInfo) GetSource() (v string) {
 	return p.Source
 }
 
-func (p *UserTokenInfo) GetExpiredAt() (v string) {
+func (p *MemberTokenInfo) GetExpiredAt() (v string) {
 	return p.ExpiredAt
 }
 
-func (p *UserTokenInfo) GetMobile() (v string) {
+func (p *MemberTokenInfo) GetMobile() (v string) {
 	return p.Mobile
 }
 
-var fieldIDToName_UserTokenInfo = map[int16]string{
+var fieldIDToName_MemberTokenInfo = map[int16]string{
 	1:  "id",
 	2:  "createdAt",
 	3:  "updatedAt",
@@ -585,7 +585,7 @@ var fieldIDToName_UserTokenInfo = map[int16]string{
 	10: "mobile",
 }
 
-func (p *UserTokenInfo) Read(iprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -695,7 +695,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserTokenInfo[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_MemberTokenInfo[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -705,7 +705,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserTokenInfo) ReadField1(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField1(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -716,7 +716,7 @@ func (p *UserTokenInfo) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField2(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField2(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -727,7 +727,7 @@ func (p *UserTokenInfo) ReadField2(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField3(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField3(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -738,7 +738,7 @@ func (p *UserTokenInfo) ReadField3(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField4(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField4(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -749,7 +749,7 @@ func (p *UserTokenInfo) ReadField4(iprot thrift.TProtocol) error {
 	p.MemberId = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField5(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -760,7 +760,7 @@ func (p *UserTokenInfo) ReadField5(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField6(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField6(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -771,7 +771,7 @@ func (p *UserTokenInfo) ReadField6(iprot thrift.TProtocol) error {
 	p.Token = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField7(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField7(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -782,7 +782,7 @@ func (p *UserTokenInfo) ReadField7(iprot thrift.TProtocol) error {
 	p.Source = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField8(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField8(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -793,7 +793,7 @@ func (p *UserTokenInfo) ReadField8(iprot thrift.TProtocol) error {
 	p.ExpiredAt = _field
 	return nil
 }
-func (p *UserTokenInfo) ReadField10(iprot thrift.TProtocol) error {
+func (p *MemberTokenInfo) ReadField10(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -805,9 +805,9 @@ func (p *UserTokenInfo) ReadField10(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserTokenInfo) Write(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserTokenInfo"); err != nil {
+	if err = oprot.WriteStructBegin("MemberTokenInfo"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -865,7 +865,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -882,7 +882,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("createdAt", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -899,7 +899,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("updatedAt", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -916,7 +916,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField4(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("memberId", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -933,7 +933,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField5(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("name", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -950,7 +950,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField6(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField6(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("token", thrift.STRING, 6); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -967,7 +967,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField7(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField7(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("source", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -984,7 +984,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField8(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField8(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("expiredAt", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -1001,7 +1001,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) writeField10(oprot thrift.TProtocol) (err error) {
+func (p *MemberTokenInfo) writeField10(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("mobile", thrift.STRING, 10); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -1018,11 +1018,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
 }
 
-func (p *UserTokenInfo) String() string {
+func (p *MemberTokenInfo) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserTokenInfo(%+v)", *p)
+	return fmt.Sprintf("MemberTokenInfo(%+v)", *p)
 
 }
 

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/logs"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -405,6 +406,8 @@ func (lu *LogsUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if lu.mutation.TimeCleared() {
 		_spec.ClearField(logs.FieldTime, field.TypeInt)
 	}
+	_spec.Node.Schema = lu.schemaConfig.Logs
+	ctx = internal.NewSchemaConfigContext(ctx, lu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logs.Label}
@@ -832,6 +835,8 @@ func (luo *LogsUpdateOne) sqlSave(ctx context.Context) (_node *Logs, err error) 
 	if luo.mutation.TimeCleared() {
 		_spec.ClearField(logs.FieldTime, field.TypeInt)
 	}
+	_spec.Node.Schema = luo.schemaConfig.Logs
+	ctx = internal.NewSchemaConfigContext(ctx, luo.schemaConfig)
 	_node = &Logs{config: luo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

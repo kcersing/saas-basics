@@ -342,6 +342,7 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 		_node = &BootcampParticipant{config: bpc.config}
 		_spec = sqlgraph.NewCreateSpec(bootcampparticipant.Table, sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = bpc.schemaConfig.BootcampParticipant
 	if id, ok := bpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -405,6 +406,7 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpc.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -422,6 +424,7 @@ func (bpc *BootcampParticipantCreate) createSpec() (*BootcampParticipant, *sqlgr
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpc.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberprofile"
 	"saas/biz/dal/db/ent/predicate"
@@ -622,6 +623,7 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpu.schemaConfig.MemberProfile
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpu.mutation.MemberIDs(); len(nodes) > 0 {
@@ -635,11 +637,14 @@ func (mpu *MemberProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpu.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mpu.schemaConfig.MemberProfile
+	ctx = internal.NewSchemaConfigContext(ctx, mpu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberprofile.Label}
@@ -1283,6 +1288,7 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpuo.schemaConfig.MemberProfile
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpuo.mutation.MemberIDs(); len(nodes) > 0 {
@@ -1296,11 +1302,14 @@ func (mpuo *MemberProfileUpdateOne) sqlSave(ctx context.Context) (_node *MemberP
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpuo.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mpuo.schemaConfig.MemberProfile
+	ctx = internal.NewSchemaConfigContext(ctx, mpuo.schemaConfig)
 	_node = &MemberProfile{config: mpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -752,6 +753,7 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleMember
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := su.mutation.RemovedMembersIDs(); len(nodes) > 0 && !su.mutation.MembersCleared() {
@@ -765,6 +767,7 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -781,6 +784,7 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -797,6 +801,7 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleCoach
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := su.mutation.RemovedCoachsIDs(); len(nodes) > 0 && !su.mutation.CoachsCleared() {
@@ -810,6 +815,7 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -826,11 +832,14 @@ func (su *ScheduleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = su.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = su.schemaConfig.Schedule
+	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{schedule.Label}
@@ -1603,6 +1612,7 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleMember
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := suo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !suo.mutation.MembersCleared() {
@@ -1616,6 +1626,7 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1632,6 +1643,7 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1648,6 +1660,7 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleCoach
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := suo.mutation.RemovedCoachsIDs(); len(nodes) > 0 && !suo.mutation.CoachsCleared() {
@@ -1661,6 +1674,7 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1677,11 +1691,14 @@ func (suo *ScheduleUpdateOne) sqlSave(ctx context.Context) (_node *Schedule, err
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = suo.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = suo.schemaConfig.Schedule
+	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
 	_node = &Schedule{config: suo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

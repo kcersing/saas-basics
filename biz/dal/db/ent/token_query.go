@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
 	"saas/biz/dal/db/ent/user"
@@ -76,6 +77,9 @@ func (tq *TokenQuery) QueryOwner() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, token.OwnerTable, token.OwnerColumn),
 		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Token
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -390,6 +394,8 @@ func (tq *TokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Token,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = tq.schemaConfig.Token
+	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -443,6 +449,8 @@ func (tq *TokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*
 
 func (tq *TokenQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := tq.querySpec()
+	_spec.Node.Schema = tq.schemaConfig.Token
+	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
 	_spec.Node.Columns = tq.ctx.Fields
 	if len(tq.ctx.Fields) > 0 {
 		_spec.Unique = tq.ctx.Unique != nil && *tq.ctx.Unique
@@ -505,6 +513,9 @@ func (tq *TokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if tq.ctx.Unique != nil && *tq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(tq.schemaConfig.Token)
+	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range tq.predicates {
 		p(selector)
 	}

@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/predicate"
@@ -80,6 +81,9 @@ func (mq *MenuQuery) QueryRoles() *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, menu.RolesTable, menu.RolesPrimaryKey...),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.RoleMenus
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -102,6 +106,9 @@ func (mq *MenuQuery) QueryParent() *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, menu.ParentTable, menu.ParentColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.Menu
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -124,6 +131,9 @@ func (mq *MenuQuery) QueryChildren() *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, menu.ChildrenTable, menu.ChildrenColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.Menu
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -146,6 +156,9 @@ func (mq *MenuQuery) QueryParams() *MenuParamQuery {
 			sqlgraph.To(menuparam.Table, menuparam.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, menu.ParamsTable, menu.ParamsColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MenuParam
+		step.Edge.Schema = schemaConfig.MenuParam
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -492,6 +505,8 @@ func (mq *MenuQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Menu, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mq.schemaConfig.Menu
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -544,6 +559,7 @@ func (mq *MenuQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*M
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(menu.RolesTable)
+		joinT.Schema(mq.schemaConfig.RoleMenus)
 		s.Join(joinT).On(s.C(role.FieldID), joinT.C(menu.RolesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(menu.RolesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -685,6 +701,8 @@ func (mq *MenuQuery) loadParams(ctx context.Context, query *MenuParamQuery, node
 
 func (mq *MenuQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mq.querySpec()
+	_spec.Node.Schema = mq.schemaConfig.Menu
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	_spec.Node.Columns = mq.ctx.Fields
 	if len(mq.ctx.Fields) > 0 {
 		_spec.Unique = mq.ctx.Unique != nil && *mq.ctx.Unique
@@ -750,6 +768,9 @@ func (mq *MenuQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mq.ctx.Unique != nil && *mq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mq.schemaConfig.Menu)
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mq.predicates {
 		p(selector)
 	}

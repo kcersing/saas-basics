@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/predicate"
@@ -326,6 +327,7 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mnu.schemaConfig.MemberNote
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mnu.mutation.NotesIDs(); len(nodes) > 0 {
@@ -339,11 +341,14 @@ func (mnu *MemberNoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mnu.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mnu.schemaConfig.MemberNote
+	ctx = internal.NewSchemaConfigContext(ctx, mnu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mnu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membernote.Label}
@@ -691,6 +696,7 @@ func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mnuo.schemaConfig.MemberNote
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mnuo.mutation.NotesIDs(); len(nodes) > 0 {
@@ -704,11 +710,14 @@ func (mnuo *MemberNoteUpdateOne) sqlSave(ctx context.Context) (_node *MemberNote
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mnuo.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mnuo.schemaConfig.MemberNote
+	ctx = internal.NewSchemaConfigContext(ctx, mnuo.schemaConfig)
 	_node = &MemberNote{config: mnuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

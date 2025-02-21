@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"saas/biz/dal/db/ent/schema/mixins"
@@ -28,7 +29,11 @@ func (MemberToken) Mixin() []ent.Mixin {
 		mixins.BaseMixin{},
 	}
 }
-
+func (MemberToken) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("owner", Member.Type).Ref("token").Unique(),
+	}
+}
 func (MemberToken) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("member_id"),

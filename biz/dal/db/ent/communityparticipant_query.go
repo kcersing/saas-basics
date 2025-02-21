@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/community"
 	"saas/biz/dal/db/ent/communityparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -78,6 +79,9 @@ func (cpq *CommunityParticipantQuery) QueryCommunity() *CommunityQuery {
 			sqlgraph.To(community.Table, community.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, communityparticipant.CommunityTable, communityparticipant.CommunityColumn),
 		)
+		schemaConfig := cpq.schemaConfig
+		step.To.Schema = schemaConfig.Community
+		step.Edge.Schema = schemaConfig.CommunityParticipant
 		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -100,6 +104,9 @@ func (cpq *CommunityParticipantQuery) QueryMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, communityparticipant.MembersTable, communityparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := cpq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		fromU = sqlgraph.SetNeighbors(cpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,6 +427,8 @@ func (cpq *CommunityParticipantQuery) sqlAll(ctx context.Context, hooks ...query
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = cpq.schemaConfig.CommunityParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -487,6 +496,7 @@ func (cpq *CommunityParticipantQuery) loadMembers(ctx context.Context, query *Me
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(communityparticipant.MembersTable)
+		joinT.Schema(cpq.schemaConfig.MemberMemberCommunitys)
 		s.Join(joinT).On(s.C(member.FieldID), joinT.C(communityparticipant.MembersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(communityparticipant.MembersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -538,6 +548,8 @@ func (cpq *CommunityParticipantQuery) loadMembers(ctx context.Context, query *Me
 
 func (cpq *CommunityParticipantQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cpq.querySpec()
+	_spec.Node.Schema = cpq.schemaConfig.CommunityParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
 	_spec.Node.Columns = cpq.ctx.Fields
 	if len(cpq.ctx.Fields) > 0 {
 		_spec.Unique = cpq.ctx.Unique != nil && *cpq.ctx.Unique
@@ -603,6 +615,9 @@ func (cpq *CommunityParticipantQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	if cpq.ctx.Unique != nil && *cpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(cpq.schemaConfig.CommunityParticipant)
+	ctx = internal.NewSchemaConfigContext(ctx, cpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range cpq.predicates {
 		p(selector)
 	}

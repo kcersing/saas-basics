@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -78,6 +79,9 @@ func (bpq *BootcampParticipantQuery) QueryBootcamps() *BootcampQuery {
 			sqlgraph.To(bootcamp.Table, bootcamp.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, bootcampparticipant.BootcampsTable, bootcampparticipant.BootcampsColumn),
 		)
+		schemaConfig := bpq.schemaConfig
+		step.To.Schema = schemaConfig.Bootcamp
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		fromU = sqlgraph.SetNeighbors(bpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -100,6 +104,9 @@ func (bpq *BootcampParticipantQuery) QueryMembers() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, bootcampparticipant.MembersTable, bootcampparticipant.MembersPrimaryKey...),
 		)
+		schemaConfig := bpq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		fromU = sqlgraph.SetNeighbors(bpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,6 +427,8 @@ func (bpq *BootcampParticipantQuery) sqlAll(ctx context.Context, hooks ...queryH
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = bpq.schemaConfig.BootcampParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, bpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -487,6 +496,7 @@ func (bpq *BootcampParticipantQuery) loadMembers(ctx context.Context, query *Mem
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(bootcampparticipant.MembersTable)
+		joinT.Schema(bpq.schemaConfig.MemberMemberBootcamps)
 		s.Join(joinT).On(s.C(member.FieldID), joinT.C(bootcampparticipant.MembersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(bootcampparticipant.MembersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -538,6 +548,8 @@ func (bpq *BootcampParticipantQuery) loadMembers(ctx context.Context, query *Mem
 
 func (bpq *BootcampParticipantQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := bpq.querySpec()
+	_spec.Node.Schema = bpq.schemaConfig.BootcampParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, bpq.schemaConfig)
 	_spec.Node.Columns = bpq.ctx.Fields
 	if len(bpq.ctx.Fields) > 0 {
 		_spec.Unique = bpq.ctx.Unique != nil && *bpq.ctx.Unique
@@ -603,6 +615,9 @@ func (bpq *BootcampParticipantQuery) sqlQuery(ctx context.Context) *sql.Selector
 	if bpq.ctx.Unique != nil && *bpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(bpq.schemaConfig.BootcampParticipant)
+	ctx = internal.NewSchemaConfigContext(ctx, bpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range bpq.predicates {
 		p(selector)
 	}

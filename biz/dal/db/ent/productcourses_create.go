@@ -293,6 +293,7 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 		_node = &ProductCourses{config: pcc.config}
 		_spec = sqlgraph.NewCreateSpec(productcourses.Table, sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = pcc.schemaConfig.ProductCourses
 	if id, ok := pcc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -340,6 +341,7 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pcc.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -357,6 +359,7 @@ func (pcc *ProductCoursesCreate) createSpec() (*ProductCourses, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pcc.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

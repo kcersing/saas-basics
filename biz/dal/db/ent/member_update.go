@@ -10,12 +10,14 @@ import (
 	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -211,6 +213,25 @@ func (mu *MemberUpdate) ClearAvatar() *MemberUpdate {
 	return mu
 }
 
+// SetTokenID sets the "token" edge to the MemberToken entity by ID.
+func (mu *MemberUpdate) SetTokenID(id int64) *MemberUpdate {
+	mu.mutation.SetTokenID(id)
+	return mu
+}
+
+// SetNillableTokenID sets the "token" edge to the MemberToken entity by ID if the given value is not nil.
+func (mu *MemberUpdate) SetNillableTokenID(id *int64) *MemberUpdate {
+	if id != nil {
+		mu = mu.SetTokenID(*id)
+	}
+	return mu
+}
+
+// SetToken sets the "token" edge to the MemberToken entity.
+func (mu *MemberUpdate) SetToken(m *MemberToken) *MemberUpdate {
+	return mu.SetTokenID(m.ID)
+}
+
 // AddMemberProfileIDs adds the "member_profile" edge to the MemberProfile entity by IDs.
 func (mu *MemberUpdate) AddMemberProfileIDs(ids ...int64) *MemberUpdate {
 	mu.mutation.AddMemberProfileIDs(ids...)
@@ -364,6 +385,12 @@ func (mu *MemberUpdate) AddMemberCommunitys(c ...*CommunityParticipant) *MemberU
 // Mutation returns the MemberMutation object of the builder.
 func (mu *MemberUpdate) Mutation() *MemberMutation {
 	return mu.mutation
+}
+
+// ClearToken clears the "token" edge to the MemberToken entity.
+func (mu *MemberUpdate) ClearToken() *MemberUpdate {
+	mu.mutation.ClearToken()
+	return mu
 }
 
 // ClearMemberProfile clears all "member_profile" edges to the MemberProfile entity.
@@ -681,6 +708,37 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
 	}
+	if mu.mutation.TokenCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   member.TokenTable,
+			Columns: []string{member.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mu.schemaConfig.MemberToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.TokenIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   member.TokenTable,
+			Columns: []string{member.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mu.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if mu.mutation.MemberProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -692,6 +750,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProfile
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberProfileIDs(); len(nodes) > 0 && !mu.mutation.MemberProfileCleared() {
@@ -705,6 +764,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -721,6 +781,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -737,6 +798,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberDetailsIDs(); len(nodes) > 0 && !mu.mutation.MemberDetailsCleared() {
@@ -750,6 +812,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -766,6 +829,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -782,6 +846,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberNote
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberNotesIDs(); len(nodes) > 0 && !mu.mutation.MemberNotesCleared() {
@@ -795,6 +860,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -811,6 +877,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -827,6 +894,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberOrdersIDs(); len(nodes) > 0 && !mu.mutation.MemberOrdersCleared() {
@@ -840,6 +908,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -856,6 +925,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -872,6 +942,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberProductsIDs(); len(nodes) > 0 && !mu.mutation.MemberProductsCleared() {
@@ -885,6 +956,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -901,6 +973,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -917,6 +990,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberEntryIDs(); len(nodes) > 0 && !mu.mutation.MemberEntryCleared() {
@@ -930,6 +1004,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -946,6 +1021,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -962,6 +1038,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberContentsIDs(); len(nodes) > 0 && !mu.mutation.MemberContentsCleared() {
@@ -975,6 +1052,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -991,6 +1069,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1007,6 +1086,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberContests
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberContestsIDs(); len(nodes) > 0 && !mu.mutation.MemberContestsCleared() {
@@ -1020,6 +1100,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1036,6 +1117,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1052,6 +1134,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberBootcamps
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberBootcampsIDs(); len(nodes) > 0 && !mu.mutation.MemberBootcampsCleared() {
@@ -1065,6 +1148,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1081,6 +1165,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1097,6 +1182,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberCommunitys
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mu.mutation.RemovedMemberCommunitysIDs(); len(nodes) > 0 && !mu.mutation.MemberCommunitysCleared() {
@@ -1110,6 +1196,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1126,11 +1213,14 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mu.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mu.schemaConfig.Member
+	ctx = internal.NewSchemaConfigContext(ctx, mu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{member.Label}
@@ -1324,6 +1414,25 @@ func (muo *MemberUpdateOne) ClearAvatar() *MemberUpdateOne {
 	return muo
 }
 
+// SetTokenID sets the "token" edge to the MemberToken entity by ID.
+func (muo *MemberUpdateOne) SetTokenID(id int64) *MemberUpdateOne {
+	muo.mutation.SetTokenID(id)
+	return muo
+}
+
+// SetNillableTokenID sets the "token" edge to the MemberToken entity by ID if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableTokenID(id *int64) *MemberUpdateOne {
+	if id != nil {
+		muo = muo.SetTokenID(*id)
+	}
+	return muo
+}
+
+// SetToken sets the "token" edge to the MemberToken entity.
+func (muo *MemberUpdateOne) SetToken(m *MemberToken) *MemberUpdateOne {
+	return muo.SetTokenID(m.ID)
+}
+
 // AddMemberProfileIDs adds the "member_profile" edge to the MemberProfile entity by IDs.
 func (muo *MemberUpdateOne) AddMemberProfileIDs(ids ...int64) *MemberUpdateOne {
 	muo.mutation.AddMemberProfileIDs(ids...)
@@ -1477,6 +1586,12 @@ func (muo *MemberUpdateOne) AddMemberCommunitys(c ...*CommunityParticipant) *Mem
 // Mutation returns the MemberMutation object of the builder.
 func (muo *MemberUpdateOne) Mutation() *MemberMutation {
 	return muo.mutation
+}
+
+// ClearToken clears the "token" edge to the MemberToken entity.
+func (muo *MemberUpdateOne) ClearToken() *MemberUpdateOne {
+	muo.mutation.ClearToken()
+	return muo
 }
 
 // ClearMemberProfile clears all "member_profile" edges to the MemberProfile entity.
@@ -1824,6 +1939,37 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	if muo.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
 	}
+	if muo.mutation.TokenCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   member.TokenTable,
+			Columns: []string{member.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = muo.schemaConfig.MemberToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.TokenIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   member.TokenTable,
+			Columns: []string{member.TokenColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = muo.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if muo.mutation.MemberProfileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1835,6 +1981,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProfile
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberProfileIDs(); len(nodes) > 0 && !muo.mutation.MemberProfileCleared() {
@@ -1848,6 +1995,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1864,6 +2012,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberprofile.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProfile
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1880,6 +2029,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberDetailsIDs(); len(nodes) > 0 && !muo.mutation.MemberDetailsCleared() {
@@ -1893,6 +2043,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1909,6 +2060,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberdetails.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1925,6 +2077,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberNote
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberNotesIDs(); len(nodes) > 0 && !muo.mutation.MemberNotesCleared() {
@@ -1938,6 +2091,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1954,6 +2108,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membernote.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberNote
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1970,6 +2125,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberOrdersIDs(); len(nodes) > 0 && !muo.mutation.MemberOrdersCleared() {
@@ -1983,6 +2139,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1999,6 +2156,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2015,6 +2173,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberProductsIDs(); len(nodes) > 0 && !muo.mutation.MemberProductsCleared() {
@@ -2028,6 +2187,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2044,6 +2204,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2060,6 +2221,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.EntryLogs
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberEntryIDs(); len(nodes) > 0 && !muo.mutation.MemberEntryCleared() {
@@ -2073,6 +2235,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2089,6 +2252,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2105,6 +2269,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberContentsIDs(); len(nodes) > 0 && !muo.mutation.MemberContentsCleared() {
@@ -2118,6 +2283,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2134,6 +2300,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2150,6 +2317,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberContests
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberContestsIDs(); len(nodes) > 0 && !muo.mutation.MemberContestsCleared() {
@@ -2163,6 +2331,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2179,6 +2348,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberContests
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2195,6 +2365,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberBootcamps
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberBootcampsIDs(); len(nodes) > 0 && !muo.mutation.MemberBootcampsCleared() {
@@ -2208,6 +2379,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2224,6 +2396,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2240,6 +2413,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberCommunitys
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := muo.mutation.RemovedMemberCommunitysIDs(); len(nodes) > 0 && !muo.mutation.MemberCommunitysCleared() {
@@ -2253,6 +2427,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2269,11 +2444,14 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = muo.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = muo.schemaConfig.Member
+	ctx = internal.NewSchemaConfigContext(ctx, muo.schemaConfig)
 	_node = &Member{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

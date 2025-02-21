@@ -3,6 +3,7 @@
 package contestparticipant
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -857,6 +858,9 @@ func HasContest() predicate.ContestParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ContestTable, ContestColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contest
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -865,6 +869,9 @@ func HasContest() predicate.ContestParticipant {
 func HasContestWith(preds ...predicate.Contest) predicate.ContestParticipant {
 	return predicate.ContestParticipant(func(s *sql.Selector) {
 		step := newContestStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contest
+		step.Edge.Schema = schemaConfig.ContestParticipant
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -880,6 +887,9 @@ func HasMembers() predicate.ContestParticipant {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, MembersTable, MembersPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -888,6 +898,9 @@ func HasMembers() predicate.ContestParticipant {
 func HasMembersWith(preds ...predicate.Member) predicate.ContestParticipant {
 	return predicate.ContestParticipant(func(s *sql.Selector) {
 		step := newMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

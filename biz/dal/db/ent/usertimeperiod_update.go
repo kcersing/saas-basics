@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
@@ -353,6 +354,7 @@ func (utpu *UserTimePeriodUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = utpu.schemaConfig.UserTimePeriod
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := utpu.mutation.UsersIDs(); len(nodes) > 0 {
@@ -366,11 +368,14 @@ func (utpu *UserTimePeriodUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = utpu.schemaConfig.UserTimePeriod
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = utpu.schemaConfig.UserTimePeriod
+	ctx = internal.NewSchemaConfigContext(ctx, utpu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, utpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usertimeperiod.Label}
@@ -744,6 +749,7 @@ func (utpuo *UserTimePeriodUpdateOne) sqlSave(ctx context.Context) (_node *UserT
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = utpuo.schemaConfig.UserTimePeriod
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := utpuo.mutation.UsersIDs(); len(nodes) > 0 {
@@ -757,11 +763,14 @@ func (utpuo *UserTimePeriodUpdateOne) sqlSave(ctx context.Context) (_node *UserT
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = utpuo.schemaConfig.UserTimePeriod
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = utpuo.schemaConfig.UserTimePeriod
+	ctx = internal.NewSchemaConfigContext(ctx, utpuo.schemaConfig)
 	_node = &UserTimePeriod{config: utpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

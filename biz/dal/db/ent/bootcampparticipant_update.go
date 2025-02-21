@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/bootcamp"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -513,6 +514,7 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpu.schemaConfig.BootcampParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := bpu.mutation.BootcampsIDs(); len(nodes) > 0 {
@@ -526,6 +528,7 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpu.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -542,6 +545,7 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpu.schemaConfig.MemberMemberBootcamps
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := bpu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !bpu.mutation.MembersCleared() {
@@ -555,6 +559,7 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpu.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -571,11 +576,14 @@ func (bpu *BootcampParticipantUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpu.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = bpu.schemaConfig.BootcampParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, bpu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, bpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bootcampparticipant.Label}
@@ -1109,6 +1117,7 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpuo.schemaConfig.BootcampParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := bpuo.mutation.BootcampsIDs(); len(nodes) > 0 {
@@ -1122,6 +1131,7 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 				IDSpec: sqlgraph.NewFieldSpec(bootcamp.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpuo.schemaConfig.BootcampParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1138,6 +1148,7 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpuo.schemaConfig.MemberMemberBootcamps
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := bpuo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !bpuo.mutation.MembersCleared() {
@@ -1151,6 +1162,7 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpuo.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1167,11 +1179,14 @@ func (bpuo *BootcampParticipantUpdateOne) sqlSave(ctx context.Context) (_node *B
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = bpuo.schemaConfig.MemberMemberBootcamps
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = bpuo.schemaConfig.BootcampParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, bpuo.schemaConfig)
 	_node = &BootcampParticipant{config: bpuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

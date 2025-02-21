@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/token"
 
@@ -41,6 +42,8 @@ func (td *TokenDelete) ExecX(ctx context.Context) int {
 
 func (td *TokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(token.Table, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
+	_spec.Node.Schema = td.schemaConfig.Token
+	ctx = internal.NewSchemaConfigContext(ctx, td.schemaConfig)
 	if ps := td.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

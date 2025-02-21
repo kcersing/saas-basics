@@ -3,6 +3,7 @@
 package order
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -977,6 +978,9 @@ func HasAmount() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, AmountTable, AmountColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderAmount
+		step.Edge.Schema = schemaConfig.OrderAmount
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -985,6 +989,9 @@ func HasAmount() predicate.Order {
 func HasAmountWith(preds ...predicate.OrderAmount) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newAmountStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderAmount
+		step.Edge.Schema = schemaConfig.OrderAmount
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1000,6 +1007,9 @@ func HasItem() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ItemTable, ItemColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderItem
+		step.Edge.Schema = schemaConfig.OrderItem
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1008,6 +1018,9 @@ func HasItem() predicate.Order {
 func HasItemWith(preds ...predicate.OrderItem) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newItemStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderItem
+		step.Edge.Schema = schemaConfig.OrderItem
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1023,6 +1036,9 @@ func HasPay() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, PayTable, PayColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderPay
+		step.Edge.Schema = schemaConfig.OrderPay
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1031,6 +1047,9 @@ func HasPay() predicate.Order {
 func HasPayWith(preds ...predicate.OrderPay) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newPayStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderPay
+		step.Edge.Schema = schemaConfig.OrderPay
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1046,6 +1065,9 @@ func HasOrderContents() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, OrderContentsTable, OrderContentsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1054,6 +1076,9 @@ func HasOrderContents() predicate.Order {
 func HasOrderContentsWith(preds ...predicate.MemberContract) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newOrderContentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1069,6 +1094,9 @@ func HasSales() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, SalesTable, SalesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderSales
+		step.Edge.Schema = schemaConfig.OrderSales
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1077,6 +1105,9 @@ func HasSales() predicate.Order {
 func HasSalesWith(preds ...predicate.OrderSales) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newSalesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrderSales
+		step.Edge.Schema = schemaConfig.OrderSales
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1092,6 +1123,9 @@ func HasOrderVenues() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderVenuesTable, OrderVenuesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1100,6 +1134,9 @@ func HasOrderVenues() predicate.Order {
 func HasOrderVenuesWith(preds ...predicate.Venue) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newOrderVenuesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Venue
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1115,6 +1152,9 @@ func HasOrderMembers() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderMembersTable, OrderMembersColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1123,6 +1163,9 @@ func HasOrderMembers() predicate.Order {
 func HasOrderMembersWith(preds ...predicate.Member) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newOrderMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1138,6 +1181,9 @@ func HasOrderCreates() predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderCreatesTable, OrderCreatesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1146,6 +1192,9 @@ func HasOrderCreates() predicate.Order {
 func HasOrderCreatesWith(preds ...predicate.User) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		step := newOrderCreatesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

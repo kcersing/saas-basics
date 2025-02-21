@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
@@ -450,6 +451,7 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oiu.schemaConfig.OrderItem
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := oiu.mutation.OrderIDs(); len(nodes) > 0 {
@@ -463,11 +465,14 @@ func (oiu *OrderItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oiu.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = oiu.schemaConfig.OrderItem
+	ctx = internal.NewSchemaConfigContext(ctx, oiu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, oiu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderitem.Label}
@@ -938,6 +943,7 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oiuo.schemaConfig.OrderItem
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := oiuo.mutation.OrderIDs(); len(nodes) > 0 {
@@ -951,11 +957,14 @@ func (oiuo *OrderItemUpdateOne) sqlSave(ctx context.Context) (_node *OrderItem, 
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oiuo.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = oiuo.schemaConfig.OrderItem
+	ctx = internal.NewSchemaConfigContext(ctx, oiuo.schemaConfig)
 	_node = &OrderItem{config: oiuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

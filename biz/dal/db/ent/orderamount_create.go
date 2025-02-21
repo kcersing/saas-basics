@@ -240,6 +240,7 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 		_node = &OrderAmount{config: oac.config}
 		_spec = sqlgraph.NewCreateSpec(orderamount.Table, sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = oac.schemaConfig.OrderAmount
 	if id, ok := oac.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -287,6 +288,7 @@ func (oac *OrderAmountCreate) createSpec() (*OrderAmount, *sqlgraph.CreateSpec) 
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oac.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

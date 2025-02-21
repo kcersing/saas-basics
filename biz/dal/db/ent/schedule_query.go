@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/schedule"
 	"saas/biz/dal/db/ent/schedulecoach"
@@ -78,6 +79,9 @@ func (sq *ScheduleQuery) QueryMembers() *ScheduleMemberQuery {
 			sqlgraph.To(schedulemember.Table, schedulemember.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, schedule.MembersTable, schedule.MembersColumn),
 		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.ScheduleMember
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -100,6 +104,9 @@ func (sq *ScheduleQuery) QueryCoachs() *ScheduleCoachQuery {
 			sqlgraph.To(schedulecoach.Table, schedulecoach.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, schedule.CoachsTable, schedule.CoachsColumn),
 		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.ScheduleCoach
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,6 +427,8 @@ func (sq *ScheduleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sch
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = sq.schemaConfig.Schedule
+	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -509,6 +518,8 @@ func (sq *ScheduleQuery) loadCoachs(ctx context.Context, query *ScheduleCoachQue
 
 func (sq *ScheduleQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sq.querySpec()
+	_spec.Node.Schema = sq.schemaConfig.Schedule
+	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
 	_spec.Node.Columns = sq.ctx.Fields
 	if len(sq.ctx.Fields) > 0 {
 		_spec.Unique = sq.ctx.Unique != nil && *sq.ctx.Unique
@@ -571,6 +582,9 @@ func (sq *ScheduleQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if sq.ctx.Unique != nil && *sq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(sq.schemaConfig.Schedule)
+	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range sq.predicates {
 		p(selector)
 	}

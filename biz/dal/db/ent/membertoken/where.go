@@ -3,10 +3,12 @@
 package membertoken
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -502,6 +504,35 @@ func ExpiredAtLT(v time.Time) predicate.MemberToken {
 // ExpiredAtLTE applies the LTE predicate on the "expired_at" field.
 func ExpiredAtLTE(v time.Time) predicate.MemberToken {
 	return predicate.MemberToken(sql.FieldLTE(FieldExpiredAt, v))
+}
+
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.MemberToken {
+	return predicate.MemberToken(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, OwnerTable, OwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberToken
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Member) predicate.MemberToken {
+	return predicate.MemberToken(func(s *sql.Selector) {
+		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberToken
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

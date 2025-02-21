@@ -244,6 +244,7 @@ func (osc *OrderSalesCreate) createSpec() (*OrderSales, *sqlgraph.CreateSpec) {
 		_node = &OrderSales{config: osc.config}
 		_spec = sqlgraph.NewCreateSpec(ordersales.Table, sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = osc.schemaConfig.OrderSales
 	if id, ok := osc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -291,6 +292,7 @@ func (osc *OrderSalesCreate) createSpec() (*OrderSales, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = osc.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

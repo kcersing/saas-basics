@@ -456,6 +456,7 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 		_node = &Contest{config: cc.config}
 		_spec = sqlgraph.NewCreateSpec(contest.Table, sqlgraph.NewFieldSpec(contest.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = cc.schemaConfig.Contest
 	if id, ok := cc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -559,6 +560,7 @@ func (cc *ContestCreate) createSpec() (*Contest, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cc.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

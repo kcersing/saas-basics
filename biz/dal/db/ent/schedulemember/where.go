@@ -3,6 +3,7 @@
 package schedulemember
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1307,6 +1308,9 @@ func HasSchedule() predicate.ScheduleMember {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ScheduleTable, ScheduleColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1315,6 +1319,9 @@ func HasSchedule() predicate.ScheduleMember {
 func HasScheduleWith(preds ...predicate.Schedule) predicate.ScheduleMember {
 	return predicate.ScheduleMember(func(s *sql.Selector) {
 		step := newScheduleStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Schedule
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

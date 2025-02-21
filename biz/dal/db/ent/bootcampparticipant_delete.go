@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"saas/biz/dal/db/ent/bootcampparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -41,6 +42,8 @@ func (bpd *BootcampParticipantDelete) ExecX(ctx context.Context) int {
 
 func (bpd *BootcampParticipantDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(bootcampparticipant.Table, sqlgraph.NewFieldSpec(bootcampparticipant.FieldID, field.TypeInt64))
+	_spec.Node.Schema = bpd.schemaConfig.BootcampParticipant
+	ctx = internal.NewSchemaConfigContext(ctx, bpd.schemaConfig)
 	if ps := bpd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -336,6 +336,7 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 		_node = &EntryLogs{config: elc.config}
 		_spec = sqlgraph.NewCreateSpec(entrylogs.Table, sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = elc.schemaConfig.EntryLogs
 	if id, ok := elc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -375,6 +376,7 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -392,6 +394,7 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -409,6 +412,7 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -426,6 +430,7 @@ func (elc *EntryLogsCreate) createSpec() (*EntryLogs, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = elc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

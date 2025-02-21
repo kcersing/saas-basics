@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
@@ -511,6 +512,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContractContent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.RemovedContentIDs(); len(nodes) > 0 && !mcu.mutation.ContentCleared() {
@@ -524,6 +526,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -540,6 +543,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -556,6 +560,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.MemberIDs(); len(nodes) > 0 {
@@ -569,6 +574,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -585,6 +591,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.OrderIDs(); len(nodes) > 0 {
@@ -598,6 +605,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -614,6 +622,7 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.MemberProductIDs(); len(nodes) > 0 {
@@ -627,11 +636,14 @@ func (mcu *MemberContractUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcu.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mcu.schemaConfig.MemberContract
+	ctx = internal.NewSchemaConfigContext(ctx, mcu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mcu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membercontract.Label}
@@ -1161,6 +1173,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContractContent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.RemovedContentIDs(); len(nodes) > 0 && !mcuo.mutation.ContentCleared() {
@@ -1174,6 +1187,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1190,6 +1204,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1206,6 +1221,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.MemberIDs(); len(nodes) > 0 {
@@ -1219,6 +1235,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1235,6 +1252,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.OrderIDs(); len(nodes) > 0 {
@@ -1248,6 +1266,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1264,6 +1283,7 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.MemberProductIDs(); len(nodes) > 0 {
@@ -1277,11 +1297,14 @@ func (mcuo *MemberContractUpdateOne) sqlSave(ctx context.Context) (_node *Member
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcuo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mcuo.schemaConfig.MemberContract
+	ctx = internal.NewSchemaConfigContext(ctx, mcuo.schemaConfig)
 	_node = &MemberContract{config: mcuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

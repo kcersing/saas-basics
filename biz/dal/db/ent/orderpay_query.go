@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderpay"
 	"saas/biz/dal/db/ent/predicate"
@@ -75,6 +76,9 @@ func (opq *OrderPayQuery) QueryOrder() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orderpay.OrderTable, orderpay.OrderColumn),
 		)
+		schemaConfig := opq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderPay
 		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (opq *OrderPayQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Or
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = opq.schemaConfig.OrderPay
+	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (opq *OrderPayQuery) loadOrder(ctx context.Context, query *OrderQuery, node
 
 func (opq *OrderPayQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := opq.querySpec()
+	_spec.Node.Schema = opq.schemaConfig.OrderPay
+	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
 	_spec.Node.Columns = opq.ctx.Fields
 	if len(opq.ctx.Fields) > 0 {
 		_spec.Unique = opq.ctx.Unique != nil && *opq.ctx.Unique
@@ -497,6 +505,9 @@ func (opq *OrderPayQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if opq.ctx.Unique != nil && *opq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(opq.schemaConfig.OrderPay)
+	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range opq.predicates {
 		p(selector)
 	}

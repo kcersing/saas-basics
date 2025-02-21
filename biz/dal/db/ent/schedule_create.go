@@ -428,6 +428,7 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 		_node = &Schedule{config: sc.config}
 		_spec = sqlgraph.NewCreateSpec(schedule.Table, sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = sc.schemaConfig.Schedule
 	if id, ok := sc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -523,6 +524,7 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = sc.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -539,6 +541,7 @@ func (sc *ScheduleCreate) createSpec() (*Schedule, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(schedulecoach.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = sc.schemaConfig.ScheduleCoach
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

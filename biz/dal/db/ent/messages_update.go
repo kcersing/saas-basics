@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/messages"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
@@ -239,6 +240,8 @@ func (mu *MessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Content(); ok {
 		_spec.SetField(messages.FieldContent, field.TypeString, value)
 	}
+	_spec.Node.Schema = mu.schemaConfig.Messages
+	ctx = internal.NewSchemaConfigContext(ctx, mu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{messages.Label}
@@ -500,6 +503,8 @@ func (muo *MessagesUpdateOne) sqlSave(ctx context.Context) (_node *Messages, err
 	if value, ok := muo.mutation.Content(); ok {
 		_spec.SetField(messages.FieldContent, field.TypeString, value)
 	}
+	_spec.Node.Schema = muo.schemaConfig.Messages
+	ctx = internal.NewSchemaConfigContext(ctx, muo.schemaConfig)
 	_node = &Messages{config: muo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

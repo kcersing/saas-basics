@@ -3,6 +3,7 @@
 package orderpay
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -812,6 +813,9 @@ func HasOrder() predicate.OrderPay {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrderTable, OrderColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderPay
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -820,6 +824,9 @@ func HasOrder() predicate.OrderPay {
 func HasOrderWith(preds ...predicate.Order) predicate.OrderPay {
 	return predicate.OrderPay(func(s *sql.Selector) {
 		step := newOrderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.OrderPay
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

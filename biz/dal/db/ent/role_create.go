@@ -346,6 +346,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node = &Role{config: rc.config}
 		_spec = sqlgraph.NewCreateSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = rc.schemaConfig.Role
 	if id, ok := rc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -409,6 +410,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = rc.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -425,6 +427,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = rc.schemaConfig.UserRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -441,6 +444,7 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = rc.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

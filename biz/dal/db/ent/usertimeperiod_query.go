@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/user"
 	"saas/biz/dal/db/ent/usertimeperiod"
@@ -75,6 +76,9 @@ func (utpq *UserTimePeriodQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, usertimeperiod.UsersTable, usertimeperiod.UsersColumn),
 		)
+		schemaConfig := utpq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		fromU = sqlgraph.SetNeighbors(utpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,6 +386,8 @@ func (utpq *UserTimePeriodQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = utpq.schemaConfig.UserTimePeriod
+	ctx = internal.NewSchemaConfigContext(ctx, utpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -432,6 +438,8 @@ func (utpq *UserTimePeriodQuery) loadUsers(ctx context.Context, query *UserQuery
 
 func (utpq *UserTimePeriodQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := utpq.querySpec()
+	_spec.Node.Schema = utpq.schemaConfig.UserTimePeriod
+	ctx = internal.NewSchemaConfigContext(ctx, utpq.schemaConfig)
 	_spec.Node.Columns = utpq.ctx.Fields
 	if len(utpq.ctx.Fields) > 0 {
 		_spec.Unique = utpq.ctx.Unique != nil && *utpq.ctx.Unique
@@ -497,6 +505,9 @@ func (utpq *UserTimePeriodQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if utpq.ctx.Unique != nil && *utpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(utpq.schemaConfig.UserTimePeriod)
+	ctx = internal.NewSchemaConfigContext(ctx, utpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range utpq.predicates {
 		p(selector)
 	}

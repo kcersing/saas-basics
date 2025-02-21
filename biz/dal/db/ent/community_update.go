@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/community"
 	"saas/biz/dal/db/ent/communityparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -777,6 +778,7 @@ func (cu *CommunityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.CommunityParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cu.mutation.RemovedCommunityParticipantsIDs(); len(nodes) > 0 && !cu.mutation.CommunityParticipantsCleared() {
@@ -790,6 +792,7 @@ func (cu *CommunityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -806,11 +809,14 @@ func (cu *CommunityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cu.schemaConfig.Community
+	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{community.Label}
@@ -1609,6 +1615,7 @@ func (cuo *CommunityUpdateOne) sqlSave(ctx context.Context) (_node *Community, e
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.CommunityParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cuo.mutation.RemovedCommunityParticipantsIDs(); len(nodes) > 0 && !cuo.mutation.CommunityParticipantsCleared() {
@@ -1622,6 +1629,7 @@ func (cuo *CommunityUpdateOne) sqlSave(ctx context.Context) (_node *Community, e
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1638,11 +1646,14 @@ func (cuo *CommunityUpdateOne) sqlSave(ctx context.Context) (_node *Community, e
 				IDSpec: sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cuo.schemaConfig.Community
+	ctx = internal.NewSchemaConfigContext(ctx, cuo.schemaConfig)
 	_node = &Community{config: cuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

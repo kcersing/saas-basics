@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menu"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/predicate"
@@ -76,6 +77,9 @@ func (mpq *MenuParamQuery) QueryMenus() *MenuQuery {
 			sqlgraph.To(menu.Table, menu.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, menuparam.MenusTable, menuparam.MenusColumn),
 		)
+		schemaConfig := mpq.schemaConfig
+		step.To.Schema = schemaConfig.Menu
+		step.Edge.Schema = schemaConfig.MenuParam
 		fromU = sqlgraph.SetNeighbors(mpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -390,6 +394,8 @@ func (mpq *MenuParamQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*M
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mpq.schemaConfig.MenuParam
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -443,6 +449,8 @@ func (mpq *MenuParamQuery) loadMenus(ctx context.Context, query *MenuQuery, node
 
 func (mpq *MenuParamQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mpq.querySpec()
+	_spec.Node.Schema = mpq.schemaConfig.MenuParam
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
 	_spec.Node.Columns = mpq.ctx.Fields
 	if len(mpq.ctx.Fields) > 0 {
 		_spec.Unique = mpq.ctx.Unique != nil && *mpq.ctx.Unique
@@ -505,6 +513,9 @@ func (mpq *MenuParamQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mpq.ctx.Unique != nil && *mpq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mpq.schemaConfig.MenuParam)
+	ctx = internal.NewSchemaConfigContext(ctx, mpq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mpq.predicates {
 		p(selector)
 	}

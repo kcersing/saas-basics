@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
 	"saas/biz/dal/db/ent/predicate"
@@ -280,6 +281,7 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mccu.schemaConfig.MemberContractContent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mccu.mutation.ContractIDs(); len(nodes) > 0 {
@@ -293,11 +295,14 @@ func (mccu *MemberContractContentUpdate) sqlSave(ctx context.Context) (n int, er
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mccu.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mccu.schemaConfig.MemberContractContent
+	ctx = internal.NewSchemaConfigContext(ctx, mccu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mccu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membercontractcontent.Label}
@@ -599,6 +604,7 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mccuo.schemaConfig.MemberContractContent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mccuo.mutation.ContractIDs(); len(nodes) > 0 {
@@ -612,11 +618,14 @@ func (mccuo *MemberContractContentUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mccuo.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mccuo.schemaConfig.MemberContractContent
+	ctx = internal.NewSchemaConfigContext(ctx, mccuo.schemaConfig)
 	_node = &MemberContractContent{config: mccuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

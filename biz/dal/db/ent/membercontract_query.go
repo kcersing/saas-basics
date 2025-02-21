@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/membercontractcontent"
@@ -82,6 +83,9 @@ func (mcq *MemberContractQuery) QueryContent() *MemberContractContentQuery {
 			sqlgraph.To(membercontractcontent.Table, membercontractcontent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, membercontract.ContentTable, membercontract.ContentColumn),
 		)
+		schemaConfig := mcq.schemaConfig
+		step.To.Schema = schemaConfig.MemberContractContent
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -104,6 +108,9 @@ func (mcq *MemberContractQuery) QueryMember() *MemberQuery {
 			sqlgraph.To(member.Table, member.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberTable, membercontract.MemberColumn),
 		)
+		schemaConfig := mcq.schemaConfig
+		step.To.Schema = schemaConfig.Member
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -126,6 +133,9 @@ func (mcq *MemberContractQuery) QueryOrder() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.OrderTable, membercontract.OrderColumn),
 		)
+		schemaConfig := mcq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -148,6 +158,9 @@ func (mcq *MemberContractQuery) QueryMemberProduct() *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, membercontract.MemberProductTable, membercontract.MemberProductColumn),
 		)
+		schemaConfig := mcq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -494,6 +507,8 @@ func (mcq *MemberContractQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mcq.schemaConfig.MemberContract
+	ctx = internal.NewSchemaConfigContext(ctx, mcq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -651,6 +666,8 @@ func (mcq *MemberContractQuery) loadMemberProduct(ctx context.Context, query *Me
 
 func (mcq *MemberContractQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mcq.querySpec()
+	_spec.Node.Schema = mcq.schemaConfig.MemberContract
+	ctx = internal.NewSchemaConfigContext(ctx, mcq.schemaConfig)
 	_spec.Node.Columns = mcq.ctx.Fields
 	if len(mcq.ctx.Fields) > 0 {
 		_spec.Unique = mcq.ctx.Unique != nil && *mcq.ctx.Unique
@@ -722,6 +739,9 @@ func (mcq *MemberContractQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mcq.ctx.Unique != nil && *mcq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mcq.schemaConfig.MemberContract)
+	ctx = internal.NewSchemaConfigContext(ctx, mcq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mcq.predicates {
 		p(selector)
 	}

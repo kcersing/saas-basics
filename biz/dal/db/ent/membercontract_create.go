@@ -328,6 +328,7 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 		_node = &MemberContract{config: mcc.config}
 		_spec = sqlgraph.NewCreateSpec(membercontract.Table, sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mcc.schemaConfig.MemberContract
 	if id, ok := mcc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -383,6 +384,7 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(membercontractcontent.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcc.schemaConfig.MemberContractContent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -399,6 +401,7 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -416,6 +419,7 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -433,6 +437,7 @@ func (mcc *MemberContractCreate) createSpec() (*MemberContract, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mcc.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

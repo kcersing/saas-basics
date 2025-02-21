@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/predicate"
@@ -612,6 +613,7 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mdu.schemaConfig.MemberDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mdu.mutation.MemberIDs(); len(nodes) > 0 {
@@ -625,11 +627,14 @@ func (mdu *MemberDetailsUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mdu.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mdu.schemaConfig.MemberDetails
+	ctx = internal.NewSchemaConfigContext(ctx, mdu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mdu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberdetails.Label}
@@ -1263,6 +1268,7 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mduo.schemaConfig.MemberDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mduo.mutation.MemberIDs(); len(nodes) > 0 {
@@ -1276,11 +1282,14 @@ func (mduo *MemberDetailsUpdateOne) sqlSave(ctx context.Context) (_node *MemberD
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mduo.schemaConfig.MemberDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mduo.schemaConfig.MemberDetails
+	ctx = internal.NewSchemaConfigContext(ctx, mduo.schemaConfig)
 	_node = &MemberDetails{config: mduo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

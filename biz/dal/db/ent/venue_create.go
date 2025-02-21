@@ -454,6 +454,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 		_node = &Venue{config: vc.config}
 		_spec = sqlgraph.NewCreateSpec(venue.Table, sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = vc.schemaConfig.Venue
 	if id, ok := vc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -537,6 +538,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.VenuePlace
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -553,6 +555,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -569,6 +572,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entrylogs.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.EntryLogs
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -585,6 +589,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.UserVenues
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -601,6 +606,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesms.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.VenueSms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -617,6 +623,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(venuesmslog.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.VenueSmsLog
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -633,6 +640,7 @@ func (vc *VenueCreate) createSpec() (*Venue, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = vc.schemaConfig.VenueRoles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

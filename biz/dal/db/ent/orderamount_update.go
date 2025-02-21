@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/orderamount"
 	"saas/biz/dal/db/ent/predicate"
@@ -358,6 +359,7 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oau.schemaConfig.OrderAmount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := oau.mutation.OrderIDs(); len(nodes) > 0 {
@@ -371,11 +373,14 @@ func (oau *OrderAmountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oau.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = oau.schemaConfig.OrderAmount
+	ctx = internal.NewSchemaConfigContext(ctx, oau.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, oau.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orderamount.Label}
@@ -755,6 +760,7 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oauo.schemaConfig.OrderAmount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := oauo.mutation.OrderIDs(); len(nodes) > 0 {
@@ -768,11 +774,14 @@ func (oauo *OrderAmountUpdateOne) sqlSave(ctx context.Context) (_node *OrderAmou
 				IDSpec: sqlgraph.NewFieldSpec(order.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = oauo.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = oauo.schemaConfig.OrderAmount
+	ctx = internal.NewSchemaConfigContext(ctx, oauo.schemaConfig)
 	_node = &OrderAmount{config: oauo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

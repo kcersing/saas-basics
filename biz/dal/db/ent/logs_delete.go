@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/logs"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (ld *LogsDelete) ExecX(ctx context.Context) int {
 
 func (ld *LogsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(logs.Table, sqlgraph.NewFieldSpec(logs.FieldID, field.TypeInt64))
+	_spec.Node.Schema = ld.schemaConfig.Logs
+	ctx = internal.NewSchemaConfigContext(ctx, ld.schemaConfig)
 	if ps := ld.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

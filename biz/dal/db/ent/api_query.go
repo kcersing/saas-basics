@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 	"saas/biz/dal/db/ent/api"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
@@ -342,6 +343,8 @@ func (aq *APIQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*API, err
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = aq.schemaConfig.API
+	ctx = internal.NewSchemaConfigContext(ctx, aq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -356,6 +359,8 @@ func (aq *APIQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*API, err
 
 func (aq *APIQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := aq.querySpec()
+	_spec.Node.Schema = aq.schemaConfig.API
+	ctx = internal.NewSchemaConfigContext(ctx, aq.schemaConfig)
 	_spec.Node.Columns = aq.ctx.Fields
 	if len(aq.ctx.Fields) > 0 {
 		_spec.Unique = aq.ctx.Unique != nil && *aq.ctx.Unique
@@ -418,6 +423,9 @@ func (aq *APIQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if aq.ctx.Unique != nil && *aq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(aq.schemaConfig.API)
+	ctx = internal.NewSchemaConfigContext(ctx, aq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range aq.predicates {
 		p(selector)
 	}

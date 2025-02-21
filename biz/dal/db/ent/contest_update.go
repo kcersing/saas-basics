@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/contest"
 	"saas/biz/dal/db/ent/contestparticipant"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -777,6 +778,7 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ContestParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cu.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !cu.mutation.ContestParticipantsCleared() {
@@ -790,6 +792,7 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -806,11 +809,14 @@ func (cu *ContestUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cu.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cu.schemaConfig.Contest
+	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contest.Label}
@@ -1609,6 +1615,7 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ContestParticipant
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cuo.mutation.RemovedContestParticipantsIDs(); len(nodes) > 0 && !cuo.mutation.ContestParticipantsCleared() {
@@ -1622,6 +1629,7 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1638,11 +1646,14 @@ func (cuo *ContestUpdateOne) sqlSave(ctx context.Context) (_node *Contest, err e
 				IDSpec: sqlgraph.NewFieldSpec(contestparticipant.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cuo.schemaConfig.ContestParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = cuo.schemaConfig.Contest
+	ctx = internal.NewSchemaConfigContext(ctx, cuo.schemaConfig)
 	_node = &Contest{config: cuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

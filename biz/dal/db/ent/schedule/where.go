@@ -3,6 +3,7 @@
 package schedule
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1287,6 +1288,9 @@ func HasMembers() predicate.Schedule {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MembersTable, MembersColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduleMember
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1295,6 +1299,9 @@ func HasMembers() predicate.Schedule {
 func HasMembersWith(preds ...predicate.ScheduleMember) predicate.Schedule {
 	return predicate.Schedule(func(s *sql.Selector) {
 		step := newMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduleMember
+		step.Edge.Schema = schemaConfig.ScheduleMember
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1310,6 +1317,9 @@ func HasCoachs() predicate.Schedule {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CoachsTable, CoachsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduleCoach
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1318,6 +1328,9 @@ func HasCoachs() predicate.Schedule {
 func HasCoachsWith(preds ...predicate.ScheduleCoach) predicate.Schedule {
 	return predicate.Schedule(func(s *sql.Selector) {
 		step := newCoachsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduleCoach
+		step.Edge.Schema = schemaConfig.ScheduleCoach
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

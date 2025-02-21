@@ -534,6 +534,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 		_node = &Menu{config: mc.config}
 		_spec = sqlgraph.NewCreateSpec(menu.Table, sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mc.schemaConfig.Menu
 	if id, ok := mc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -637,6 +638,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.RoleMenus
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -653,6 +655,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -670,6 +673,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(menu.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.Menu
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -686,6 +690,7 @@ func (mc *MenuCreate) createSpec() (*Menu, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mc.schemaConfig.MenuParam
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

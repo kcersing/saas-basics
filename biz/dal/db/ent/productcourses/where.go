@@ -3,6 +3,7 @@
 package productcourses
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -587,6 +588,9 @@ func HasNodeC() predicate.ProductCourses {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, NodeCTable, NodeCColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -595,6 +599,9 @@ func HasNodeC() predicate.ProductCourses {
 func HasNodeCWith(preds ...predicate.Product) predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
 		step := newNodeCStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -610,6 +617,9 @@ func HasNodeL() predicate.ProductCourses {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, NodeLTable, NodeLColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -618,6 +628,9 @@ func HasNodeL() predicate.ProductCourses {
 func HasNodeLWith(preds ...predicate.Product) predicate.ProductCourses {
 	return predicate.ProductCourses(func(s *sql.Selector) {
 		step := newNodeLStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

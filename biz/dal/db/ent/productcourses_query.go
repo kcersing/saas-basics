@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/productcourses"
@@ -76,6 +77,9 @@ func (pcq *ProductCoursesQuery) QueryNodeC() *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeCTable, productcourses.NodeCColumn),
 		)
+		schemaConfig := pcq.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -98,6 +102,9 @@ func (pcq *ProductCoursesQuery) QueryNodeL() *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, productcourses.NodeLTable, productcourses.NodeLColumn),
 		)
+		schemaConfig := pcq.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductCourses
 		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -418,6 +425,8 @@ func (pcq *ProductCoursesQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = pcq.schemaConfig.ProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, pcq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -503,6 +512,8 @@ func (pcq *ProductCoursesQuery) loadNodeL(ctx context.Context, query *ProductQue
 
 func (pcq *ProductCoursesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pcq.querySpec()
+	_spec.Node.Schema = pcq.schemaConfig.ProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, pcq.schemaConfig)
 	_spec.Node.Columns = pcq.ctx.Fields
 	if len(pcq.ctx.Fields) > 0 {
 		_spec.Unique = pcq.ctx.Unique != nil && *pcq.ctx.Unique
@@ -571,6 +582,9 @@ func (pcq *ProductCoursesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if pcq.ctx.Unique != nil && *pcq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(pcq.schemaConfig.ProductCourses)
+	ctx = internal.NewSchemaConfigContext(ctx, pcq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range pcq.predicates {
 		p(selector)
 	}

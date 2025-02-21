@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/menuparam"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (mpd *MenuParamDelete) ExecX(ctx context.Context) int {
 
 func (mpd *MenuParamDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(menuparam.Table, sqlgraph.NewFieldSpec(menuparam.FieldID, field.TypeInt64))
+	_spec.Node.Schema = mpd.schemaConfig.MenuParam
+	ctx = internal.NewSchemaConfigContext(ctx, mpd.schemaConfig)
 	if ps := mpd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

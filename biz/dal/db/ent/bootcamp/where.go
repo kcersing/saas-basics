@@ -3,6 +3,7 @@
 package bootcamp
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -1262,6 +1263,9 @@ func HasBootcampParticipants() predicate.Bootcamp {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BootcampParticipantsTable, BootcampParticipantsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1270,6 +1274,9 @@ func HasBootcampParticipants() predicate.Bootcamp {
 func HasBootcampParticipantsWith(preds ...predicate.BootcampParticipant) predicate.Bootcamp {
 	return predicate.Bootcamp(func(s *sql.Selector) {
 		step := newBootcampParticipantsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.BootcampParticipant
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

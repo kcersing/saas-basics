@@ -11,12 +11,14 @@ import (
 	"saas/biz/dal/db/ent/communityparticipant"
 	"saas/biz/dal/db/ent/contestparticipant"
 	"saas/biz/dal/db/ent/entrylogs"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/memberdetails"
 	"saas/biz/dal/db/ent/membernote"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberprofile"
+	"saas/biz/dal/db/ent/membertoken"
 	"saas/biz/dal/db/ent/order"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -32,6 +34,7 @@ type MemberQuery struct {
 	order                []member.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Member
+	withToken            *MemberTokenQuery
 	withMemberProfile    *MemberProfileQuery
 	withMemberDetails    *MemberDetailsQuery
 	withMemberNotes      *MemberNoteQuery
@@ -78,6 +81,31 @@ func (mq *MemberQuery) Order(o ...member.OrderOption) *MemberQuery {
 	return mq
 }
 
+// QueryToken chains the current query on the "token" edge.
+func (mq *MemberQuery) QueryToken() *MemberTokenQuery {
+	query := (&MemberTokenClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(member.Table, member.FieldID, selector),
+			sqlgraph.To(membertoken.Table, membertoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, member.TokenTable, member.TokenColumn),
+		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberToken
+		step.Edge.Schema = schemaConfig.MemberToken
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMemberProfile chains the current query on the "member_profile" edge.
 func (mq *MemberQuery) QueryMemberProfile() *MemberProfileQuery {
 	query := (&MemberProfileClient{config: mq.config}).Query()
@@ -94,6 +122,9 @@ func (mq *MemberQuery) QueryMemberProfile() *MemberProfileQuery {
 			sqlgraph.To(memberprofile.Table, memberprofile.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProfileTable, member.MemberProfileColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProfile
+		step.Edge.Schema = schemaConfig.MemberProfile
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -116,6 +147,9 @@ func (mq *MemberQuery) QueryMemberDetails() *MemberDetailsQuery {
 			sqlgraph.To(memberdetails.Table, memberdetails.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberDetailsTable, member.MemberDetailsColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberDetails
+		step.Edge.Schema = schemaConfig.MemberDetails
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -138,6 +172,9 @@ func (mq *MemberQuery) QueryMemberNotes() *MemberNoteQuery {
 			sqlgraph.To(membernote.Table, membernote.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberNotesTable, member.MemberNotesColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberNote
+		step.Edge.Schema = schemaConfig.MemberNote
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -160,6 +197,9 @@ func (mq *MemberQuery) QueryMemberOrders() *OrderQuery {
 			sqlgraph.To(order.Table, order.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberOrdersTable, member.MemberOrdersColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -182,6 +222,9 @@ func (mq *MemberQuery) QueryMemberProducts() *MemberProductQuery {
 			sqlgraph.To(memberproduct.Table, memberproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberProductsTable, member.MemberProductsColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProduct
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -204,6 +247,9 @@ func (mq *MemberQuery) QueryMemberEntry() *EntryLogsQuery {
 			sqlgraph.To(entrylogs.Table, entrylogs.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberEntryTable, member.MemberEntryColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -226,6 +272,9 @@ func (mq *MemberQuery) QueryMemberContents() *MemberContractQuery {
 			sqlgraph.To(membercontract.Table, membercontract.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, member.MemberContentsTable, member.MemberContentsColumn),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -248,6 +297,9 @@ func (mq *MemberQuery) QueryMemberContests() *ContestParticipantQuery {
 			sqlgraph.To(contestparticipant.Table, contestparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberContestsTable, member.MemberContestsPrimaryKey...),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -270,6 +322,9 @@ func (mq *MemberQuery) QueryMemberBootcamps() *BootcampParticipantQuery {
 			sqlgraph.To(bootcampparticipant.Table, bootcampparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberBootcampsTable, member.MemberBootcampsPrimaryKey...),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -292,6 +347,9 @@ func (mq *MemberQuery) QueryMemberCommunitys() *CommunityParticipantQuery {
 			sqlgraph.To(communityparticipant.Table, communityparticipant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, member.MemberCommunitysTable, member.MemberCommunitysPrimaryKey...),
 		)
+		schemaConfig := mq.schemaConfig
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -490,6 +548,7 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 		order:                append([]member.OrderOption{}, mq.order...),
 		inters:               append([]Interceptor{}, mq.inters...),
 		predicates:           append([]predicate.Member{}, mq.predicates...),
+		withToken:            mq.withToken.Clone(),
 		withMemberProfile:    mq.withMemberProfile.Clone(),
 		withMemberDetails:    mq.withMemberDetails.Clone(),
 		withMemberNotes:      mq.withMemberNotes.Clone(),
@@ -504,6 +563,17 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 		sql:  mq.sql.Clone(),
 		path: mq.path,
 	}
+}
+
+// WithToken tells the query-builder to eager-load the nodes that are connected to
+// the "token" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MemberQuery) WithToken(opts ...func(*MemberTokenQuery)) *MemberQuery {
+	query := (&MemberTokenClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withToken = query
+	return mq
 }
 
 // WithMemberProfile tells the query-builder to eager-load the nodes that are connected to
@@ -694,7 +764,8 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	var (
 		nodes       = []*Member{}
 		_spec       = mq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
+			mq.withToken != nil,
 			mq.withMemberProfile != nil,
 			mq.withMemberDetails != nil,
 			mq.withMemberNotes != nil,
@@ -716,6 +787,8 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = mq.schemaConfig.Member
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -724,6 +797,12 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := mq.withToken; query != nil {
+		if err := mq.loadToken(ctx, query, nodes, nil,
+			func(n *Member, e *MemberToken) { n.Edges.Token = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := mq.withMemberProfile; query != nil {
 		if err := mq.loadMemberProfile(ctx, query, nodes,
@@ -800,6 +879,34 @@ func (mq *MemberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Membe
 	return nodes, nil
 }
 
+func (mq *MemberQuery) loadToken(ctx context.Context, query *MemberTokenQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberToken)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Member)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.MemberToken(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(member.TokenColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.member_token
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "member_token" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "member_token" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (mq *MemberQuery) loadMemberProfile(ctx context.Context, query *MemberProfileQuery, nodes []*Member, init func(*Member), assign func(*Member, *MemberProfile)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*Member)
@@ -1023,6 +1130,7 @@ func (mq *MemberQuery) loadMemberContests(ctx context.Context, query *ContestPar
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(member.MemberContestsTable)
+		joinT.Schema(mq.schemaConfig.MemberMemberContests)
 		s.Join(joinT).On(s.C(contestparticipant.FieldID), joinT.C(member.MemberContestsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(member.MemberContestsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1084,6 +1192,7 @@ func (mq *MemberQuery) loadMemberBootcamps(ctx context.Context, query *BootcampP
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(member.MemberBootcampsTable)
+		joinT.Schema(mq.schemaConfig.MemberMemberBootcamps)
 		s.Join(joinT).On(s.C(bootcampparticipant.FieldID), joinT.C(member.MemberBootcampsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(member.MemberBootcampsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1145,6 +1254,7 @@ func (mq *MemberQuery) loadMemberCommunitys(ctx context.Context, query *Communit
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(member.MemberCommunitysTable)
+		joinT.Schema(mq.schemaConfig.MemberMemberCommunitys)
 		s.Join(joinT).On(s.C(communityparticipant.FieldID), joinT.C(member.MemberCommunitysPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(member.MemberCommunitysPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1196,6 +1306,8 @@ func (mq *MemberQuery) loadMemberCommunitys(ctx context.Context, query *Communit
 
 func (mq *MemberQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := mq.querySpec()
+	_spec.Node.Schema = mq.schemaConfig.Member
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
 	_spec.Node.Columns = mq.ctx.Fields
 	if len(mq.ctx.Fields) > 0 {
 		_spec.Unique = mq.ctx.Unique != nil && *mq.ctx.Unique
@@ -1258,6 +1370,9 @@ func (mq *MemberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if mq.ctx.Unique != nil && *mq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(mq.schemaConfig.Member)
+	ctx = internal.NewSchemaConfigContext(ctx, mq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range mq.predicates {
 		p(selector)
 	}

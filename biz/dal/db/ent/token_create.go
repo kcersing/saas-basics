@@ -221,6 +221,7 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 		_node = &Token{config: tc.config}
 		_spec = sqlgraph.NewCreateSpec(token.Table, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = tc.schemaConfig.Token
 	if id, ok := tc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -268,6 +269,7 @@ func (tc *TokenCreate) createSpec() (*Token, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = tc.schemaConfig.Token
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

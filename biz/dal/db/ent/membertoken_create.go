@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membertoken"
 	"time"
 
@@ -106,6 +107,25 @@ func (mtc *MemberTokenCreate) SetID(i int64) *MemberTokenCreate {
 	return mtc
 }
 
+// SetOwnerID sets the "owner" edge to the Member entity by ID.
+func (mtc *MemberTokenCreate) SetOwnerID(id int64) *MemberTokenCreate {
+	mtc.mutation.SetOwnerID(id)
+	return mtc
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Member entity by ID if the given value is not nil.
+func (mtc *MemberTokenCreate) SetNillableOwnerID(id *int64) *MemberTokenCreate {
+	if id != nil {
+		mtc = mtc.SetOwnerID(*id)
+	}
+	return mtc
+}
+
+// SetOwner sets the "owner" edge to the Member entity.
+func (mtc *MemberTokenCreate) SetOwner(m *Member) *MemberTokenCreate {
+	return mtc.SetOwnerID(m.ID)
+}
+
 // Mutation returns the MemberTokenMutation object of the builder.
 func (mtc *MemberTokenCreate) Mutation() *MemberTokenMutation {
 	return mtc.mutation
@@ -201,6 +221,7 @@ func (mtc *MemberTokenCreate) createSpec() (*MemberToken, *sqlgraph.CreateSpec) 
 		_node = &MemberToken{config: mtc.config}
 		_spec = sqlgraph.NewCreateSpec(membertoken.Table, sqlgraph.NewFieldSpec(membertoken.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = mtc.schemaConfig.MemberToken
 	if id, ok := mtc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -236,6 +257,24 @@ func (mtc *MemberTokenCreate) createSpec() (*MemberToken, *sqlgraph.CreateSpec) 
 	if value, ok := mtc.mutation.ExpiredAt(); ok {
 		_spec.SetField(membertoken.FieldExpiredAt, field.TypeTime, value)
 		_node.ExpiredAt = value
+	}
+	if nodes := mtc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   membertoken.OwnerTable,
+			Columns: []string{membertoken.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
+			},
+		}
+		edge.Schema = mtc.schemaConfig.MemberToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.member_token = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

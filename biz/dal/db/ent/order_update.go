@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/membercontract"
 	"saas/biz/dal/db/ent/order"
@@ -713,6 +714,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderAmount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedAmountIDs(); len(nodes) > 0 && !ou.mutation.AmountCleared() {
@@ -726,6 +728,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -742,6 +745,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -758,6 +762,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderItem
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedItemIDs(); len(nodes) > 0 && !ou.mutation.ItemCleared() {
@@ -771,6 +776,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -787,6 +793,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -803,6 +810,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderPay
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedPayIDs(); len(nodes) > 0 && !ou.mutation.PayCleared() {
@@ -816,6 +824,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -832,6 +841,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -848,6 +858,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedOrderContentsIDs(); len(nodes) > 0 && !ou.mutation.OrderContentsCleared() {
@@ -861,6 +872,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -877,6 +889,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -893,6 +906,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderSales
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedSalesIDs(); len(nodes) > 0 && !ou.mutation.SalesCleared() {
@@ -906,6 +920,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -922,6 +937,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -938,6 +954,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.OrderVenuesIDs(); len(nodes) > 0 {
@@ -951,6 +968,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -967,6 +985,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.OrderMembersIDs(); len(nodes) > 0 {
@@ -980,6 +999,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -996,6 +1016,7 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.OrderCreatesIDs(); len(nodes) > 0 {
@@ -1009,11 +1030,14 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ou.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = ou.schemaConfig.Order
+	ctx = internal.NewSchemaConfigContext(ctx, ou.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{order.Label}
@@ -1741,6 +1765,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderAmount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedAmountIDs(); len(nodes) > 0 && !ouo.mutation.AmountCleared() {
@@ -1754,6 +1779,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1770,6 +1796,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderamount.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderAmount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1786,6 +1813,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderItem
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedItemIDs(); len(nodes) > 0 && !ouo.mutation.ItemCleared() {
@@ -1799,6 +1827,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1815,6 +1844,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderItem
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1831,6 +1861,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderPay
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedPayIDs(); len(nodes) > 0 && !ouo.mutation.PayCleared() {
@@ -1844,6 +1875,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1860,6 +1892,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(orderpay.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderPay
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1876,6 +1909,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.MemberContract
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedOrderContentsIDs(); len(nodes) > 0 && !ouo.mutation.OrderContentsCleared() {
@@ -1889,6 +1923,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1905,6 +1940,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(membercontract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.MemberContract
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1921,6 +1957,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderSales
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedSalesIDs(); len(nodes) > 0 && !ouo.mutation.SalesCleared() {
@@ -1934,6 +1971,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1950,6 +1988,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(ordersales.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.OrderSales
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1966,6 +2005,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.OrderVenuesIDs(); len(nodes) > 0 {
@@ -1979,6 +2019,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(venue.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1995,6 +2036,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.OrderMembersIDs(); len(nodes) > 0 {
@@ -2008,6 +2050,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2024,6 +2067,7 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.OrderCreatesIDs(); len(nodes) > 0 {
@@ -2037,11 +2081,14 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (_node *Order, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = ouo.schemaConfig.Order
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = ouo.schemaConfig.Order
+	ctx = internal.NewSchemaConfigContext(ctx, ouo.schemaConfig)
 	_node = &Order{config: ouo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

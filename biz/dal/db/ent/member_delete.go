@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/member"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (md *MemberDelete) ExecX(ctx context.Context) int {
 
 func (md *MemberDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(member.Table, sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64))
+	_spec.Node.Schema = md.schemaConfig.Member
+	ctx = internal.NewSchemaConfigContext(ctx, md.schemaConfig)
 	if ps := md.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

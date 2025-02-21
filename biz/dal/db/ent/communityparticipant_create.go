@@ -328,6 +328,7 @@ func (cpc *CommunityParticipantCreate) createSpec() (*CommunityParticipant, *sql
 		_node = &CommunityParticipant{config: cpc.config}
 		_spec = sqlgraph.NewCreateSpec(communityparticipant.Table, sqlgraph.NewFieldSpec(communityparticipant.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = cpc.schemaConfig.CommunityParticipant
 	if id, ok := cpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -391,6 +392,7 @@ func (cpc *CommunityParticipantCreate) createSpec() (*CommunityParticipant, *sql
 				IDSpec: sqlgraph.NewFieldSpec(community.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpc.schemaConfig.CommunityParticipant
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -408,6 +410,7 @@ func (cpc *CommunityParticipantCreate) createSpec() (*CommunityParticipant, *sql
 				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = cpc.schemaConfig.MemberMemberCommunitys
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

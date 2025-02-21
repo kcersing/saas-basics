@@ -24,17 +24,17 @@ func customizedRegister(r *server.Hertz) {
 	r.POST("/service/login", mw.GetJWTMw(casbin.CasbinEnforcer()).LoginHandler)
 	r.POST("/service/logout", mw.GetJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
 	r.POST("/service/refresh_token", mw.GetJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
-	// MemberLogin .
+	//MemberLogin .
 	//
 	//	@Summary		会员登录 Summary
 	//	@Description	会员登录 Description
 	//	@Param			request	body		wx.MemberLoginReq	true	"query params"
 	//	@Success		200		{object}	utils.Response
 	//
-	// @router /service/wx/member/login [POST]
-	//r.POST("/service/wx/member/login", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LoginHandler)
-	//r.POST("/service/wx/member/logout", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
-	//r.POST("/service/wx/member/refresh_token", mw.GetUsJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
+	//@router /service/wx/member/login [POST]
+	r.POST("/service/wx/member/login", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LoginHandler)
+	r.POST("/service/wx/member/logout", mw.GetUsJWTMw(casbin.CasbinEnforcer()).LogoutHandler)
+	r.POST("/service/wx/member/refresh_token", mw.GetUsJWTMw(casbin.CasbinEnforcer()).RefreshHandler)
 
 	// StaffLogin .
 	//

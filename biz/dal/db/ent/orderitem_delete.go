@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/orderitem"
 	"saas/biz/dal/db/ent/predicate"
 
@@ -41,6 +42,8 @@ func (oid *OrderItemDelete) ExecX(ctx context.Context) int {
 
 func (oid *OrderItemDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orderitem.Table, sqlgraph.NewFieldSpec(orderitem.FieldID, field.TypeInt64))
+	_spec.Node.Schema = oid.schemaConfig.OrderItem
+	ctx = internal.NewSchemaConfigContext(ctx, oid.schemaConfig)
 	if ps := oid.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -3,6 +3,7 @@
 package usertimeperiod
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -492,6 +493,9 @@ func HasUsers() predicate.UserTimePeriod {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, UsersTable, UsersColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -500,6 +504,9 @@ func HasUsers() predicate.UserTimePeriod {
 func HasUsersWith(preds ...predicate.User) predicate.UserTimePeriod {
 	return predicate.UserTimePeriod(func(s *sql.Selector) {
 		step := newUsersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTimePeriod
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

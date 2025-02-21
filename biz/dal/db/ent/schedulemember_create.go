@@ -451,6 +451,7 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 		_node = &ScheduleMember{config: smc.config}
 		_spec = sqlgraph.NewCreateSpec(schedulemember.Table, sqlgraph.NewFieldSpec(schedulemember.FieldID, field.TypeInt64))
 	)
+	_spec.Schema = smc.schemaConfig.ScheduleMember
 	if id, ok := smc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -550,6 +551,7 @@ func (smc *ScheduleMemberCreate) createSpec() (*ScheduleMember, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(schedule.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = smc.schemaConfig.ScheduleMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

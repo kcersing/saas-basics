@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"saas/biz/dal/db/ent/api"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -256,6 +257,8 @@ func (au *APIUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.Method(); ok {
 		_spec.SetField(api.FieldMethod, field.TypeString, value)
 	}
+	_spec.Node.Schema = au.schemaConfig.API
+	ctx = internal.NewSchemaConfigContext(ctx, au.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{api.Label}
@@ -534,6 +537,8 @@ func (auo *APIUpdateOne) sqlSave(ctx context.Context) (_node *API, err error) {
 	if value, ok := auo.mutation.Method(); ok {
 		_spec.SetField(api.FieldMethod, field.TypeString, value)
 	}
+	_spec.Node.Schema = auo.schemaConfig.API
+	ctx = internal.NewSchemaConfigContext(ctx, auo.schemaConfig)
 	_node = &API{config: auo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

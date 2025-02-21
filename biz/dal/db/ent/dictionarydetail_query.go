@@ -9,6 +9,7 @@ import (
 	"math"
 	"saas/biz/dal/db/ent/dictionary"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/user"
@@ -80,6 +81,9 @@ func (ddq *DictionaryDetailQuery) QueryDictionary() *DictionaryQuery {
 			sqlgraph.To(dictionary.Table, dictionary.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, dictionarydetail.DictionaryTable, dictionarydetail.DictionaryColumn),
 		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.Dictionary
+		step.Edge.Schema = schemaConfig.DictionaryDetail
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -102,6 +106,9 @@ func (ddq *DictionaryDetailQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.UsersTable, dictionarydetail.UsersPrimaryKey...),
 		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserTags
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -124,6 +131,9 @@ func (ddq *DictionaryDetailQuery) QueryProducts() *ProductQuery {
 			sqlgraph.To(product.Table, product.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, dictionarydetail.ProductsTable, dictionarydetail.ProductsPrimaryKey...),
 		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.Product
+		step.Edge.Schema = schemaConfig.ProductTags
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -457,6 +467,8 @@ func (ddq *DictionaryDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = ddq.schemaConfig.DictionaryDetail
+	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -531,6 +543,7 @@ func (ddq *DictionaryDetailQuery) loadUsers(ctx context.Context, query *UserQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(dictionarydetail.UsersTable)
+		joinT.Schema(ddq.schemaConfig.UserTags)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(dictionarydetail.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(dictionarydetail.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -592,6 +605,7 @@ func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *Produ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(dictionarydetail.ProductsTable)
+		joinT.Schema(ddq.schemaConfig.ProductTags)
 		s.Join(joinT).On(s.C(product.FieldID), joinT.C(dictionarydetail.ProductsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(dictionarydetail.ProductsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -643,6 +657,8 @@ func (ddq *DictionaryDetailQuery) loadProducts(ctx context.Context, query *Produ
 
 func (ddq *DictionaryDetailQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ddq.querySpec()
+	_spec.Node.Schema = ddq.schemaConfig.DictionaryDetail
+	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
 	_spec.Node.Columns = ddq.ctx.Fields
 	if len(ddq.ctx.Fields) > 0 {
 		_spec.Unique = ddq.ctx.Unique != nil && *ddq.ctx.Unique
@@ -708,6 +724,9 @@ func (ddq *DictionaryDetailQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if ddq.ctx.Unique != nil && *ddq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(ddq.schemaConfig.DictionaryDetail)
+	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range ddq.predicates {
 		p(selector)
 	}

@@ -3,6 +3,7 @@
 package member
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -650,6 +651,35 @@ func AvatarContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldAvatar, v))
 }
 
+// HasToken applies the HasEdge predicate on the "token" edge.
+func HasToken() predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, TokenTable, TokenColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberToken
+		step.Edge.Schema = schemaConfig.MemberToken
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTokenWith applies the HasEdge predicate on the "token" edge with a given conditions (other predicates).
+func HasTokenWith(preds ...predicate.MemberToken) predicate.Member {
+	return predicate.Member(func(s *sql.Selector) {
+		step := newTokenStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberToken
+		step.Edge.Schema = schemaConfig.MemberToken
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMemberProfile applies the HasEdge predicate on the "member_profile" edge.
 func HasMemberProfile() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
@@ -657,6 +687,9 @@ func HasMemberProfile() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberProfileTable, MemberProfileColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberProfile
+		step.Edge.Schema = schemaConfig.MemberProfile
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -665,6 +698,9 @@ func HasMemberProfile() predicate.Member {
 func HasMemberProfileWith(preds ...predicate.MemberProfile) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberProfileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberProfile
+		step.Edge.Schema = schemaConfig.MemberProfile
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -680,6 +716,9 @@ func HasMemberDetails() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberDetailsTable, MemberDetailsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberDetails
+		step.Edge.Schema = schemaConfig.MemberDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -688,6 +727,9 @@ func HasMemberDetails() predicate.Member {
 func HasMemberDetailsWith(preds ...predicate.MemberDetails) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberDetailsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberDetails
+		step.Edge.Schema = schemaConfig.MemberDetails
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -703,6 +745,9 @@ func HasMemberNotes() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberNotesTable, MemberNotesColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberNote
+		step.Edge.Schema = schemaConfig.MemberNote
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -711,6 +756,9 @@ func HasMemberNotes() predicate.Member {
 func HasMemberNotesWith(preds ...predicate.MemberNote) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberNotesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberNote
+		step.Edge.Schema = schemaConfig.MemberNote
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -726,6 +774,9 @@ func HasMemberOrders() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberOrdersTable, MemberOrdersColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -734,6 +785,9 @@ func HasMemberOrders() predicate.Member {
 func HasMemberOrdersWith(preds ...predicate.Order) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberOrdersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Order
+		step.Edge.Schema = schemaConfig.Order
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -749,6 +803,9 @@ func HasMemberProducts() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberProductsTable, MemberProductsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProduct
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -757,6 +814,9 @@ func HasMemberProducts() predicate.Member {
 func HasMemberProductsWith(preds ...predicate.MemberProduct) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberProduct
+		step.Edge.Schema = schemaConfig.MemberProduct
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -772,6 +832,9 @@ func HasMemberEntry() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberEntryTable, MemberEntryColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -780,6 +843,9 @@ func HasMemberEntry() predicate.Member {
 func HasMemberEntryWith(preds ...predicate.EntryLogs) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberEntryStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EntryLogs
+		step.Edge.Schema = schemaConfig.EntryLogs
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -795,6 +861,9 @@ func HasMemberContents() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, MemberContentsTable, MemberContentsColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -803,6 +872,9 @@ func HasMemberContents() predicate.Member {
 func HasMemberContentsWith(preds ...predicate.MemberContract) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberContentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContract
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -818,6 +890,9 @@ func HasMemberContests() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, MemberContestsTable, MemberContestsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -826,6 +901,9 @@ func HasMemberContests() predicate.Member {
 func HasMemberContestsWith(preds ...predicate.ContestParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberContestsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContestParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberContests
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -841,6 +919,9 @@ func HasMemberBootcamps() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, MemberBootcampsTable, MemberBootcampsPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -849,6 +930,9 @@ func HasMemberBootcamps() predicate.Member {
 func HasMemberBootcampsWith(preds ...predicate.BootcampParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberBootcampsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.BootcampParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberBootcamps
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -864,6 +948,9 @@ func HasMemberCommunitys() predicate.Member {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, MemberCommunitysTable, MemberCommunitysPrimaryKey...),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -872,6 +959,9 @@ func HasMemberCommunitys() predicate.Member {
 func HasMemberCommunitysWith(preds ...predicate.CommunityParticipant) predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
 		step := newMemberCommunitysStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CommunityParticipant
+		step.Edge.Schema = schemaConfig.MemberMemberCommunitys
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

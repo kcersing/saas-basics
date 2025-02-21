@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"saas/biz/dal/db/ent/contract"
 	"saas/biz/dal/db/ent/dictionarydetail"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"saas/biz/dal/db/ent/product"
 	"saas/biz/dal/db/ent/productcourses"
@@ -975,6 +976,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedTagsIDs(); len(nodes) > 0 && !pu.mutation.TagsCleared() {
@@ -988,6 +990,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1004,6 +1007,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1020,6 +1024,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductContracts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedContractsIDs(); len(nodes) > 0 && !pu.mutation.ContractsCleared() {
@@ -1033,6 +1038,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1049,6 +1055,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1065,6 +1072,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedCoursesIDs(); len(nodes) > 0 && !pu.mutation.CoursesCleared() {
@@ -1078,6 +1086,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1094,6 +1103,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1110,6 +1120,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedLessonsIDs(); len(nodes) > 0 && !pu.mutation.LessonsCleared() {
@@ -1123,6 +1134,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1139,6 +1151,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1155,6 +1168,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.VenuePlaceProducts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !pu.mutation.ProductsCleared() {
@@ -1168,6 +1182,7 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1184,11 +1199,14 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = pu.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = pu.schemaConfig.Product
+	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{product.Label}
@@ -2180,6 +2198,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductTags
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !puo.mutation.TagsCleared() {
@@ -2193,6 +2212,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2209,6 +2229,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(dictionarydetail.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductTags
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2225,6 +2246,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductContracts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedContractsIDs(); len(nodes) > 0 && !puo.mutation.ContractsCleared() {
@@ -2238,6 +2260,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2254,6 +2277,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(contract.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductContracts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2270,6 +2294,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedCoursesIDs(); len(nodes) > 0 && !puo.mutation.CoursesCleared() {
@@ -2283,6 +2308,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2299,6 +2325,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2315,6 +2342,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedLessonsIDs(); len(nodes) > 0 && !puo.mutation.LessonsCleared() {
@@ -2328,6 +2356,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2344,6 +2373,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(productcourses.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.ProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2360,6 +2390,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.VenuePlaceProducts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !puo.mutation.ProductsCleared() {
@@ -2373,6 +2404,7 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2389,11 +2421,14 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				IDSpec: sqlgraph.NewFieldSpec(venueplace.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = puo.schemaConfig.VenuePlaceProducts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = puo.schemaConfig.Product
+	ctx = internal.NewSchemaConfigContext(ctx, puo.schemaConfig)
 	_node = &Product{config: puo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

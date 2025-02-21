@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/memberproduct"
 	"saas/biz/dal/db/ent/memberproductcourses"
 	"saas/biz/dal/db/ent/predicate"
@@ -377,6 +378,7 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcu.schemaConfig.MemberProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpcu.mutation.NodeCIDs(); len(nodes) > 0 {
@@ -390,6 +392,7 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcu.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -406,6 +409,7 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcu.schemaConfig.MemberProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpcu.mutation.NodeLIDs(); len(nodes) > 0 {
@@ -419,11 +423,14 @@ func (mpcu *MemberProductCoursesUpdate) sqlSave(ctx context.Context) (n int, err
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcu.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mpcu.schemaConfig.MemberProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, mpcu.schemaConfig)
 	if n, err = sqlgraph.UpdateNodes(ctx, mpcu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{memberproductcourses.Label}
@@ -822,6 +829,7 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcuo.schemaConfig.MemberProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpcuo.mutation.NodeCIDs(); len(nodes) > 0 {
@@ -835,6 +843,7 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcuo.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -851,6 +860,7 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcuo.schemaConfig.MemberProductCourses
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mpcuo.mutation.NodeLIDs(); len(nodes) > 0 {
@@ -864,11 +874,14 @@ func (mpcuo *MemberProductCoursesUpdateOne) sqlSave(ctx context.Context) (_node 
 				IDSpec: sqlgraph.NewFieldSpec(memberproduct.FieldID, field.TypeInt64),
 			},
 		}
+		edge.Schema = mpcuo.schemaConfig.MemberProductCourses
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.Node.Schema = mpcuo.schemaConfig.MemberProductCourses
+	ctx = internal.NewSchemaConfigContext(ctx, mpcuo.schemaConfig)
 	_node = &MemberProductCourses{config: mpcuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

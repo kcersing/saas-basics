@@ -3,6 +3,7 @@
 package membercontractcontent
 
 import (
+	"saas/biz/dal/db/ent/internal"
 	"saas/biz/dal/db/ent/predicate"
 	"time"
 
@@ -477,6 +478,9 @@ func HasContract() predicate.MemberContractContent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, ContractTable, ContractColumn),
 		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -485,6 +489,9 @@ func HasContract() predicate.MemberContractContent {
 func HasContractWith(preds ...predicate.MemberContract) predicate.MemberContractContent {
 	return predicate.MemberContractContent(func(s *sql.Selector) {
 		step := newContractStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MemberContract
+		step.Edge.Schema = schemaConfig.MemberContractContent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
