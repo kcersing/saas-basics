@@ -1,6 +1,6 @@
 # saas
-试试写写 
-Hertz + Kitex 
+单体 
+Hertz  
 
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
@@ -20,18 +20,19 @@ GO111MODULE=on go install github.com/cloudwego/thriftgo@latest
 | 功能      | 实现             |
 |---------|----------------|
 | HTTP 框架 | Hertz          |
-| RPC 框架  | Kitex          |
+| RPC 框架  | Kitex（无）       |
 | 数据库     | MySQL、Redis    |
-| 身份鉴权    | Paseto         |
-| 服务与配置中心 | Consul         |
+| 数据库orm  | ent            |
 | 消息队列    | RabbitMQ       |
-| 服务治理    | OpenTelemetry  |
+| 身份鉴权    | JWT            |
+| 访问控制    | Casbin         |
+| API 文档  | Swagger        |
+| 身份鉴权    | JWT 认证         |
 | 指标监控    | Prometheus     |
-| 链路追踪    | Jaeger         |
-| 限流熔断    | Sentinel       |
 | 对象存储    | MinIO          |
 | 图像识别    | 百度 OCR         |
 | CI      | GitHub Actions |
+| 代码生成    | hz-thrift      |
 
 
 
