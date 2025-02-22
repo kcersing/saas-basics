@@ -136,7 +136,7 @@ func newJWT(enforcer *casbin.Enforcer) (jwtMiddleware *jwt.HertzJWTMiddleware, e
 				return false
 			}
 
-			existToken := service.NewToken(ctx, c).IsExistByUserID(int64(userIdInt))
+			existToken := service.NewToken(ctx, c).IsExistByUserId(int64(userIdInt))
 			if !existToken {
 				return false
 			}

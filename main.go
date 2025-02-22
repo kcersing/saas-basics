@@ -9,6 +9,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/logger/accesslog"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
 	"github.com/hertz-contrib/reverseproxy"
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
@@ -30,7 +31,13 @@ func main() {
 	h := server.Default(
 		server.WithStreamBody(true),
 		server.WithHostPorts(fmt.Sprintf("%s:%d", config.GlobalServerConfig.Host, config.GlobalServerConfig.Port)),
+		server.WithTracer(
+			prometheus.NewServerTracer(":9091", "/hertz",
+				prometheus.WithEnableGoCollector(true), // enable go runtime metric collector
+			),
+		),
 	)
+
 	//h.SetCustomSignalWaiter(func(err chan error) error {
 	//	return nil
 	//})

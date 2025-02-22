@@ -38,3 +38,51 @@ services:
 #    profiles:
 #      - dev
 #      - release
+
+
+  es01:
+    container_name: es01
+    image: elasticsearch:8.17.2
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - TZ=Asia/Shanghai
+      - http.host=0.0.0.0
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=es2025
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    volumes:
+      - /xingfufit/es/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /xingfufit/es/data:/usr/share/elasticsearch/data
+      - /xingfufit/es/plugins:/usr/share/elasticsearch/plugins
+      - /xingfufit/es/logs:/usr/share/elasticsearch/logs
+    networks:
+      - elastic
+
+  kibana:
+    container_name: kibana
+    image: kibana:8.17.2
+    restart: unless-stopped
+    environment:
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=es2025
+    volumes:
+      - /xingfufit/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic
+    depends_on:
+      - es01
+
+networks:
+  elastic:
+    external: true

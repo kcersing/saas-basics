@@ -1,8 +1,19 @@
 # start the environment of FreeCar
+.PHONY: init
+init:
+	go env -w GO111MODULE=on
+	go env -w GOPROXY=https://goproxy.cn,direct
+	export GO111MODULE=on
+	export GOPROXY=https://goproxy.cn
+	export GOPROXY=https://mirrors.aliyun.com/goproxy/
+	go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
+	go install github.com/cloudwego/hertz/cmd/hz@latest
+	go install github.com/cloudwego/cwgo@latest
+	go install github.com/cloudwego/thriftgo@latest
 
 .PHONY: start
 start:
-	docker-compose up -d --build 
+	docker-compose up --compatibility -d --build
 
 # stop the environment of FreeCar
 

@@ -38,13 +38,20 @@ func LogMw() app.HandlerFunc {
 
 		costTime := time.Since(start).Milliseconds()
 		logs.Time = int64(int32(costTime))
-
+		var username string
 		v, exist := c.Get("userId")
 		if exist || v == nil {
-			v = "0"
+			username = "member"
+			v, exist = c.Get("memberId")
+			if exist || v == nil {
+				v = "0"
+			}
+		} else {
+			username = "Anonymous"
+
 		}
 		var userIDStr string
-		var username = "Anonymous"
+
 		var ok bool
 
 		userIDStr, ok = v.(string)
@@ -59,14 +66,22 @@ func LogMw() app.HandlerFunc {
 			userID = 0
 		}
 
-		userInfo, err := service.NewUser(ctx, c).Info(int64(userID))
-
-		if err != nil {
-			hlog.Error(err)
-		}
-
-		if userInfo != nil {
-			username = userInfo.Name
+		if username == "member" {
+			userInfo, err := service.NewMember(ctx, c).MemberInfo(int64(userID))
+			if err != nil {
+				hlog.Error(err)
+			}
+			if userInfo != nil {
+				username = userInfo.Name
+			}
+		} else {
+			userInfo, err := service.NewUser(ctx, c).Info(int64(userID))
+			if err != nil {
+				hlog.Error(err)
+			}
+			if userInfo != nil {
+				username = userInfo.Name
+			}
 		}
 
 		logs.Operatorsr = username
