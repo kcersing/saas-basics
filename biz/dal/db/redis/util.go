@@ -6,33 +6,33 @@ import (
 )
 
 // add k & v to redis
-func add(c *redis.Client, k string, v int64) {
+func add(c *redis.Client, k string, v interface{}) {
 	tx := c.TxPipeline()
-	tx.SAdd(k, v)
-	tx.Expire(k, expireTime)
-	tx.Exec()
+	tx.SAdd(ctx, k, v)
+	tx.Expire(ctx, k, expireTime)
+	tx.Exec(ctx)
 }
 
 // del k & v
-func del(c *redis.Client, k string, v int64) {
+func del(c *redis.Client, k string, v interface{}) {
 	tx := c.TxPipeline()
-	tx.SRem(k, v)
-	tx.Expire(k, expireTime)
-	tx.Exec()
+	tx.SRem(ctx, k, v)
+	tx.Expire(ctx, k, expireTime)
+	tx.Exec(ctx)
 }
 
 // check the set of k if exist
 func check(c *redis.Client, k string) bool {
-	if e, _ := c.Exists(k).Result(); e > 0 {
+	if e, _ := c.Exists(ctx, k).Result(); e > 0 {
 		return true
 	}
 	return false
 }
 
 // exist check the relation k and v if exist
-func exist(c *redis.Client, k string, v int64) bool {
-	if e, _ := c.SIsMember(k, v).Result(); e {
-		c.Expire(k, expireTime)
+func exist(c *redis.Client, k string, v interface{}) bool {
+	if e, _ := c.SIsMember(ctx, k, v).Result(); e {
+		c.Expire(ctx, k, expireTime)
 		return true
 	}
 	return false
@@ -40,19 +40,19 @@ func exist(c *redis.Client, k string, v int64) bool {
 
 // count get the size of the set of key
 func count(c *redis.Client, k string) (sum int64, err error) {
-	if sum, err = c.SCard(k).Result(); err == nil {
-		c.Expire(k, expireTime)
+	if sum, err = c.SCard(ctx, k).Result(); err == nil {
+		c.Expire(ctx, k, expireTime)
 		return sum, err
 	}
 	return sum, err
 }
 
-func get(c *redis.Client, k string) (vt []int64) {
-	v, _ := c.SMembers(k).Result()
-	c.Expire(k, expireTime)
+func get(c *redis.Client, k string) (vt []interface{}) {
+	v, _ := c.SMembers(ctx, k).Result()
+	c.Expire(ctx, k, expireTime)
 	for _, vs := range v {
-		v_i64, _ := strconv.ParseInt(vs, 10, 64)
-		vt = append(vt, v_i64)
+		vI64, _ := strconv.ParseInt(vs, 10, 64)
+		vt = append(vt, vI64)
 	}
 	return vt
 }

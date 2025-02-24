@@ -65,7 +65,7 @@ gen-ent:
 #cd /xingfufit/go/saas-basics/
 #lsof -i :9039
 #export PATH=$PATH:/usr/local/go/bin
-#alias air='$(go env GOPATH)/bin/air'
+#alias air='$(go env GOPATH)/bin/air
 #git pull
 #go run .
 
